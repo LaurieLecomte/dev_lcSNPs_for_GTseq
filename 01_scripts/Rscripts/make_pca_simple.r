@@ -42,7 +42,7 @@ var10<-round(pca$values[10]*100/sum(pca$values[pca$values>=0]),2)
 #k_ss<-round(kmeans_res$betweenss/kmeans_res$totss,3)
 
 #save 4PCS eigenvalues and k means SS
-write.table(pca.mat[,1:10], paste0(INPUT,".pca"), quote=F)
+#write.table(pca.mat[,1:10], paste0(INPUT,".pca"), quote=F)
 write.table(c(var1,var2,var3,var4,var5,var6,var7,var8,var9,var10), paste0(INPUT,".eig"), quote=F)
 
 #plot pca

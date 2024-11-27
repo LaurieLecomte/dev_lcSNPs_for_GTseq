@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 1 -J concat_SNPs_canonical -o log/concat_SNPs_canonical_%j.log /bin/sh 01_scripts/concat_SNPs_canonical.sh &
+# srun -p small -c 1 -J 04_concat_SNPs_canonical -o log/04_concat_SNPs_canonical_%j.log /bin/sh 01_scripts/04_concat_SNPs_canonical.sh &
 
 # VARIABLES
 GENOME="03_genome/genome.fasta"

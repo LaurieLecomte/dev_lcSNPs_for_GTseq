@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# /bin/sh 01_scripts/prepare_regions.sh &
+# /bin/sh 01_scripts/01_prepare_regions.sh &
 
 # VARIABLES
 GENOME="03_genome/genome.fasta"

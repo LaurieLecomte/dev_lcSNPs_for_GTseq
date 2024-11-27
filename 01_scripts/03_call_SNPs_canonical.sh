@@ -3,13 +3,8 @@
 ### This script will work on all bamfiles and use ANGSD to call SNPs from the previously create list of canonical SNPs,
 ### and output genotype likelihood (beagle.gz) and MAF (maf.gz)
 
-### This process was parallelized by chromosomes for considerable gains in efficiency
-### For example, to run 10 chromosomes at the same time, use:
-### cat 02_info/regions_number.txt | parallel -j10 srun -c 4 --mem 20G -p ibis_small -o log_%j --time 1-00:00 ./01_scripts/03B_gl_maf_canonical.sh {}
-### Adjust -j and -c to fit your available ressources
-
-# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J call_SNPs_canonical_{} -o log/call_SNPs_canonical_{}_%j.log /bin/sh 01_scripts/call_SNPs_canonical.sh {} &
-# srun -p small -c 4  --mem=20G -J call_SNPs_canonical_NC_036838.1 -o log/call_SNPs_canonical_NC_036838.1_%j.log /bin/sh 01_scripts/call_SNPs_canonical.sh "NC_036838.1" &
+# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 03_call_SNPs_canonical_{} -o log/03_call_SNPs_canonical_{}_%j.log /bin/sh 01_scripts/03_call_SNPs_canonical.sh {} &
+# srun -p small -c 4  --mem=20G -J 03_call_SNPs_canonical_NC_036838.1 -o log/03_call_SNPs_canonical_NC_036838.1_%j.log /bin/sh 01_scripts/03_call_SNPs_canonical.sh "NC_036838.1" &
 
 # VARIABLES
 GENOME="03_genome/genome.fasta"

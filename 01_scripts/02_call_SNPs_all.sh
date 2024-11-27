@@ -4,11 +4,9 @@
 ### then calculate the likelihoods that reads wer mismapped at the position of snps using ngsparalog
 ### to produce list of canonical and deviant SNPs
 
-### This process was parallelized by chromosomes for considerable gains in efficiency
-### For example, to run 10 chromosomes at the same time, use:
-### cat 02_info/regions_number.txt | parallel -j10 srun -c 4 --mem 20G -p ibis_small -o log_%j --time 1-00:00 ./01_scripts/03A_ngsparalog.sh {}
-# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J call_SNPs_all_{} -o log/call_SNPs_all_{}_%j.log /bin/sh 01_scripts/call_SNPs_all.sh {} &
-# srun -p small -c 4 --mem=20G -J call_SNPs_all_NC_036838.1 -o log/call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/call_SNPs_all.sh "NC_036838.1" &
+
+# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 02_call_SNPs_all_{} -o log/02_call_SNPs_all_{}_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh {} &
+# srun -p small -c 4 --mem=20G -J 02_call_SNPs_all_NC_036838.1 -o log/02_call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh "NC_036838.1" &
 
 # VARIABLES
 GENOME="03_genome/genome.fasta"

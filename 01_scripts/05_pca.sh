@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# srun -p small -c 4 -J pca -o log/pca_%j.log /bin/sh 01_scripts/
+# srun -p small -c 4 -J 05_pca -o log/05_pca_%j.log /bin/sh 01_scripts/05_pca.sh & 
+
 # VARIABLES
 GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
 BAMLIST="02_infos/bam.filelist"
+
+PCA_DIR="06_pca"
 
 #REGION=$1
 
@@ -40,6 +43,7 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 
 CHR_LIST="02_infos/chrs.txt"
 
+ID_POP="02_infos/ID_POP.txt"
 
 #maybe edit
 NB_CPU=4 #change accordingly in SLURM header
@@ -52,18 +56,21 @@ NB_CPU=4 #change accordingly in SLURM header
 #conda install ipython numpy scipy six pandas python-dateutil cython numba
 
 #you may need to edit the name of the environnemnt depending on what you chose
-conda activate pcangsd_test 
+#conda activate pcangsd_test 
 
+# LOAD REQUIRED MODULES
+module load pcangsd/1.10
+module load R/4.2
 
 
 #this is the input file for the pca
 INPUT="$SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz"
 
 echo "analyse covariance matrix on all individuals"
-pcangsd -threads $NB_CPU \
-	-beagle $INPUT -o 04_pca/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+pcangsd --threads $NB_CPU -b $INPUT -o $PCA_DIR/"$(basename -s '.beagle.gz' $INPUT)"
 
 echo "transform covariance matrix into PCA"
-COV_MAT=04_pca/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".cov
-Rscript 01_scripts/Rscripts/make_pca_simple.r "$COV_MAT" "$BAM_LIST"
+COV_MAT=$PCA_DIR/"$(basename -s '.beagle.gz' $INPUT)".cov
+#Rscript 01_scripts/Rscripts/make_pca_simple.r "$COV_MAT" "$BAMLIST"
+Rscript 01_scripts/Rscripts/pca_simple.R "$COV_MAT" "$BAMLIST" "$INPUT" $ID_POP
 
