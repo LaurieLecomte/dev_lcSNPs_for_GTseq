@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 4 -J 06_ngs_admix -o log/06_ngs_admix_%j.log /bin/sh 01_scripts/06_ngs_admix.sh &
+# srun -p medium --time=7-00:00 --mem=50G -c 4 -J 06_ngs_admix -o log/06_ngs_admix_%j.log /bin/sh 01_scripts/06_ngs_admix.sh &
 
 ###this script will work on all individuals using the beagle genotype likelihood and perform an admixture analysis 
 #this requires NGSadmix to be installed and its path export in the bashrc

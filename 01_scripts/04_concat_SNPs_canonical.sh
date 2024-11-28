@@ -42,7 +42,7 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 CHR_LIST="02_infos/chrs.txt"
 
 # LOAD REQUIRED MODULES
-module load angsd/0.937
+module load angsd/0.931
 module load samtools/1.15
 module load R/4.2
 
@@ -68,7 +68,7 @@ do
 done
 
 # 3. Compress
-bgzip $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle
+bgzip -f $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle
 
 # MAFS
 # 1. Extract header for 1st chr : 
