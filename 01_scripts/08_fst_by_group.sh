@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p medium -c 6 --mem=50G -J 08_fst_by_group -o log/08_fst_by_group_%j.log /bin/sh 01_scripts/08_fst_by_group.sh &
+# srun -p medium -c 4 --mem=50G -J 08_fst_by_group -o log/08_fst_by_group_%j.log /bin/sh 01_scripts/08_fst_by_group.sh &
 
 
 ###this script will 
@@ -55,9 +55,11 @@ PVAL_THRESHOLD=0.001
 # Execs
 NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
+REALSFS="/prg/angsd/0.937/misc/realSFS"
+#REALSFS="/prg/angsd/0.931/misc/realSFS"
 
 #maybe edit
-NB_CPU=6 #change accordingly in SLURM header
+NB_CPU=4 #change accordingly in SLURM header
 NSITES=500000 #to make realSFS goes faster -reduce the number of sites considered
 GROUP=pop #the subgroup on whcih we are making the fst comparison -> it should be a file like GROUP.txt in the folder 02_info
 #POP_FILE1=02_info/"$GROUP".txt #choose on which list of pop run the analyses
@@ -70,16 +72,16 @@ GROUP=pop #the subgroup on whcih we are making the fst comparison -> it should b
 #module load angsd/0.937
 #module load samtools/1.15
 #module load R/4.2
-module load angsd/0.931 #only with this version the SFS/FST script runs well (edit in sept 2022)
+module load angsd/0.937 #only with this version the SFS/FST script runs well (edit in sept 2022)
 
 #make sure you index the sites file with the same version 
 ulimit -S -n 2048
 
 # Before analysis and if not done before : combine per-chromosome canonical SNP lists
 #cat 02_info/sites_by_chr/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr[0-9][0-9]_canonical) > 02_info/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
-cat $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canonical > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
+#cat $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canonical > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
 ## Index this sites file
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
+#angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
 
 
 #make a folder in which write new results
@@ -87,28 +89,29 @@ mkdir $FST_DIR/$GROUP
 
 
 # 1. Subset bamfilelist to have equal number of bam files per pop -> necessary ?
+
 Rscript 01_scripts/Rscripts/subset_random_Nind.r "$GROUP" $FST_DIR
 
 #2 do saf for all population listed
-cat $POP_FILE1 | while read i
-do
-  echo $i
+#cat $POP_FILE1 | while read i
+#do
+#  echo $i
 
-  N_IND=$(wc -l 07_fst_by_pop_pair/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
-  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
-  MIN_IND=${MIN_IND_FLOAT%.*} 
+#  N_IND=$(wc -l $FST_DIR/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
+#  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
+#  MIN_IND=${MIN_IND_FLOAT%.*} 
 
-  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
-  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
+#  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
+#  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
 
-  angsd -P $NB_CPU \
-  -dosaf 1 -GL 2 -doMajorMinor 3 \
-  -anc $GENOME \
-  -rf $REGION_LIST \
-  -remove_bads 1 -minMapQ 30 -minQ 20 -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
-  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical \
-  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
-done
+#  angsd -P $NB_CPU \
+#  -dosaf 1 -GL 2 -doMajorMinor 3 \
+#  -anc $GENOME \
+#  -rf $REGION_LIST \
+#  -remove_bads 1 -minMapQ 30 -minQ 20 -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
+#  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical \
+#  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+#done
 
 
 
@@ -129,7 +132,7 @@ do
 		echo "$pop2"
 		
 		echo "calcualte the 2dsfs priors"
-		realSFS  $FST_DIR/$GROUP/"$pop1"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
+		$REALSFS $FST_DIR/$GROUP/"$pop1"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
     $FST_DIR/$GROUP/"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
     -P $NB_CPU -maxIter 30 -nSites $NSITES > $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"."$NSITES"
     
@@ -138,21 +141,21 @@ do
     Rscript 01_scripts/Rscripts/sum_sites_2dsfs.r "$file"
 		
 		echo " prepare the fst for easy window analysis etc"
-		realSFS fst index $FST_DIR/$GROUP/"$pop1"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
+		$REALSFS fst index $FST_DIR/$GROUP/"$pop1"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
     $FST_DIR/$GROUP/"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \
     -sfs $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"."$NSITES".2dsfs \
     -P $NB_CPU -fstout $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
 
 		echo "print SFS priori for each position"
-		realSFS fst print $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
+		$REALSFS fst print $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
     -P $NB_CPU > $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".bypos.sfs
 		
 		echo "get the global estimate of FST throughout the genome"
-		realSFS fst stats $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
+		$REALSFS fst stats $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
     -P $NB_CPU > $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst
 		
 		echo "calculate FST by slidingwindow, window size=$WINDOW and step=$WINDOW_STEP, as given in 01_config.sh"
-		realSFS  fst stats2 $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
+		$REALSFS fst stats2 $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
     -win $WINDOW -step $WINDOW_STEP -P $NB_CPU > $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".slidingwindow
 	done
 done
