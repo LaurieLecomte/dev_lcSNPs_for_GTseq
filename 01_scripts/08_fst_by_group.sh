@@ -78,10 +78,6 @@ module load angsd/0.937 #only with this version the SFS/FST script runs well (ed
 ulimit -S -n 2048
 
 # Before analysis and if not done before : combine per-chromosome canonical SNP lists
-#cat 02_info/sites_by_chr/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr[0-9][0-9]_canonical) > 02_info/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
-#cat $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canonical > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
-## Index this sites file
-#angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical
 
 
 #make a folder in which write new results
@@ -93,25 +89,27 @@ mkdir $FST_DIR/$GROUP
 Rscript 01_scripts/Rscripts/subset_random_Nind.r "$GROUP" $FST_DIR
 
 #2 do saf for all population listed
-#cat $POP_FILE1 | while read i
-#do
-#  echo $i
+cat $POP_FILE1 | while read i
+do
+  echo $i
 
-#  N_IND=$(wc -l $FST_DIR/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
-#  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
-#  MIN_IND=${MIN_IND_FLOAT%.*} 
+  N_IND=$(wc -l $FST_DIR/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
+  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
+  MIN_IND=${MIN_IND_FLOAT%.*} 
 
-#  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
-#  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
+  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
+  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
 
-#  angsd -P $NB_CPU \
-#  -dosaf 1 -GL 2 -doMajorMinor 3 \
-#  -anc $GENOME \
-#  -rf $REGION_LIST \
-#  -remove_bads 1 -minMapQ 30 -minQ 20 -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
-#  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical \
-#  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
-#done
+  # CHRECK FOR -anc or -ref and -doMajorMinor
+  # CORRECT MIN_IND
+  angsd -P $NB_CPU \
+  -dosaf 1 -GL 2 -doMajorMinor 3 \
+  -anc $GENOME \
+  -rf $REGION_LIST \
+  -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH \
+  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites \
+  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+done
 
 
 
