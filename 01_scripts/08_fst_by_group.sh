@@ -103,8 +103,8 @@ do
   # CHRECK FOR -anc or -ref and -doMajorMinor
   # CORRECT MIN_IND
   angsd -P $NB_CPU \
-  -dosaf 1 -GL 2 -doMajorMinor 3 \
-  -anc $GENOME \
+  -dosaf 5 -GL 2 -doMajorMinor 4 \
+  -ref $GENOME \
   -rf $REGION_LIST \
   -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH \
   -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites \

@@ -61,8 +61,8 @@ echo "filter on allele frequency = $MIN_MAF"
 
 ## Calculate the MAF and GL
 angsd -P $NB_CPU -nQueueSize 50 \
--domaf 1 -GL 2 -doGlf 2 -doMajorMinor 1 \
--anc $GENOME \
+-domaf 1 -GL 2 -doGlf 2 -doMajorMinor 4 \
+-ref $GENOME \
 -sites $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
 -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -skipTriallelic 1 \
 -uniqueOnly 1 -only_proper_pairs 1 \

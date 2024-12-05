@@ -103,7 +103,7 @@ do
   echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
   
   ##### CORRECT MIN_IND
-  angsd -P $NB_CPU -nQueueSize 50 -doMaf 1 -GL 2 -doMajorMinor 3 \
+  angsd -P $NB_CPU -nQueueSize 50 -doMaf 1 -GL 2 -doMajorMinor 4 \
   -ref $GENOME -rf $REGION_LIST -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites -b 02_infos/"$i"bam.filelist -out $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
   
   
