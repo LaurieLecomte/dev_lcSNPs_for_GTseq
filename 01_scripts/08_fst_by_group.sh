@@ -107,7 +107,7 @@ do
   -ref $GENOME \
   -rf $REGION_LIST \
   -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH \
-  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites \
+  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites \
   -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
 done
 

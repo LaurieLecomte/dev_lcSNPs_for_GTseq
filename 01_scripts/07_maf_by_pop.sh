@@ -74,8 +74,8 @@ ulimit -S -n 2048
 #angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
 
 # Prepare a list of sites with major and minor allele fields to use with -doMajorMinor 3 if required 
-less $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tail -n+2 | cut -f1-4 > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
+#less $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tail -n+2 | cut -f1-4 > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
+#angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
 
 # Replace spaces by tabs for later steps
 less $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tr ' ' '\t' > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list
@@ -104,7 +104,7 @@ do
   
   ##### CORRECT MIN_IND
   angsd -P $NB_CPU -nQueueSize 50 -doMaf 1 -GL 2 -doMajorMinor 4 \
-  -ref $GENOME -rf $REGION_LIST -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites -b 02_infos/"$i"bam.filelist -out $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+  -ref $GENOME -rf $REGION_LIST -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites -b 02_infos/"$i"bam.filelist -out $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
   
   
   gunzip -c $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs.gz > $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs
