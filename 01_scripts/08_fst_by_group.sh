@@ -3,13 +3,15 @@
 # srun -p medium -c 4 --mem=50G -J 08_fst_by_group -o log/08_fst_by_group_%j.log /bin/sh 01_scripts/08_fst_by_group.sh &
 
 
+
+
 ###this script will 
 #1 make a subset of bamlist to ahev equal nb of samples
 #2calculate the saf by pop
 #3 calculate 2dSFS and FST
 #it uses the last version of angsd (unfold for saf and fold for realSFS)
 
-GENOME="03_genome/genome.fasta"
+GENOME="03_genome/genome.corrected.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
@@ -21,9 +23,9 @@ MAF_DIR="08_maf_by_pop"
 FST_DIR="09_fst"
 
 CHR_LIST="02_infos/chrs.txt"
-ID_POP="02_infos/ID_POP.txt"
+ID_POP="02_infos/ID_POP_40.txt" ### CORRIGER
 
-POP_FILE1="02_infos/pop_list.txt"
+POP_FILE1="02_infos/pop.txt"
 
 REGION_LIST="02_infos/regions_to_keep.txt"
 
@@ -155,5 +157,14 @@ do
 		echo "calculate FST by slidingwindow, window size=$WINDOW and step=$WINDOW_STEP, as given in 01_config.sh"
 		$REALSFS fst stats2 $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst.idx \
     -win $WINDOW -step $WINDOW_STEP -P $NB_CPU > $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".slidingwindow
+    
+    # Output paiwise Fst in a file
+    FST_UNW=$(less $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst | cut -f1)
+    FST_W=$(less $FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".fst | cut -f2)
+    echo -e "$pop1\t$POP2\t$FST_UNW\t$FST_W\n$pop2\t$pop1\t$FST_UNW\t$FST_W" >> $FST_DIR/paiwise_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".txt
 	done
 done
+
+
+# Output paiwise Fst in a single file
+#for i in $(ls 09_fst/pop/*10.fst); do PAIR=$(echo $i | sed -E 's/.+\/([A-Za-z]+\_[A-Za-z]+)\_maf.+/\1/'); POP1=$(echo ${PAIR%_*} ); POP2=$(echo "${PAIR##*_}"); FST1=$(less $i | cut -f1); FST2=$(less $i | cut -f2); echo -e "$POP1\t$POP2\t$FST1\t$FST2\n$POP2\t$POP1\t$FST1\t$FST2" >> 09_fst/pairwise_fst.txt; done
