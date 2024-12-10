@@ -7,7 +7,7 @@
 # srun -p small -c 4  --mem=20G -J 03_call_SNPs_canonical_NC_036838.1 -o log/03_call_SNPs_canonical_NC_036838.1_%j.log /bin/sh 01_scripts/03_call_SNPs_canonical.sh "NC_036838.1" &
 
 # VARIABLES
-GENOME="03_genome/genome.fasta"
+GENOME="03_genome/genome.corrected.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
@@ -61,7 +61,7 @@ echo "filter on allele frequency = $MIN_MAF"
 
 ## Calculate the MAF and GL
 angsd -P $NB_CPU -nQueueSize 50 \
--domaf 1 -GL 2 -doGlf 2 -doMajorMinor 4 \
+-domaf 1 -GL 2 -doGlf 2 -doMajorMinor 1 \
 -ref $GENOME \
 -sites $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
 -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -skipTriallelic 1 \

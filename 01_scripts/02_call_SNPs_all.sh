@@ -9,7 +9,7 @@
 # srun -p small -c 4 --mem=20G -J 02_call_SNPs_all_NC_036838.1 -o log/02_call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh "NC_036838.1" &
 
 # VARIABLES
-GENOME="03_genome/genome.fasta"
+GENOME="03_genome/genome.corrected.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
@@ -103,7 +103,7 @@ then
 fi
 
 ## Unzip .maf file
-gunzip $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".mafs.gz 
+gunzip -f $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".mafs.gz 
 
 ## Filter sites
 INFILE=$SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".mafs
