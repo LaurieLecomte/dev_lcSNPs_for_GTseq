@@ -88,7 +88,7 @@ mkdir $FST_DIR/$GROUP
 
 # 1. Subset bamfilelist to have equal number of bam files per pop -> necessary ?
 
-Rscript 01_scripts/Rscripts/subset_random_Nind.r "$GROUP" $FST_DIR
+Rscript 01_scripts/utils/subset_random_Nind.r "$GROUP" $FST_DIR
 
 #2 do saf for all population listed
 cat $POP_FILE1 | while read i
@@ -138,7 +138,7 @@ do
     
     file=$FST_DIR/$GROUP/"$pop1"_"$pop2"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"."$NSITES"
     
-    Rscript 01_scripts/Rscripts/sum_sites_2dsfs.r "$file"
+    Rscript 01_scripts/utils/sum_sites_2dsfs.r "$file"
 		
 		echo " prepare the fst for easy window analysis etc"
 		$REALSFS fst index $FST_DIR/$GROUP/"$pop1"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".saf.idx \

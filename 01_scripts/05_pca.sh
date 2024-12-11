@@ -72,5 +72,5 @@ pcangsd --threads $NB_CPU -b $INPUT -o $PCA_DIR/"$(basename -s '.beagle.gz' $INP
 echo "transform covariance matrix into PCA"
 COV_MAT=$PCA_DIR/"$(basename -s '.beagle.gz' $INPUT)".cov
 #Rscript 01_scripts/Rscripts/make_pca_simple.r "$COV_MAT" "$BAMLIST"
-Rscript 01_scripts/Rscripts/pca_simple.R "$COV_MAT" "$BAMLIST" "$INPUT" $ID_POP
+Rscript 01_scripts/utils/pca_simple.R "$COV_MAT" "$BAMLIST" "$INPUT" $ID_POP
 

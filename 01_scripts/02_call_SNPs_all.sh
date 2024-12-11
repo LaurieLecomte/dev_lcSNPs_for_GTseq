@@ -110,7 +110,7 @@ INFILE=$SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTO
 OUTFILE_sites=$SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
 BED_FILE=$SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".bed
 
-Rscript 01_scripts/Rscripts/make_sites_list_maxdepth_simple.R "$INFILE" "$OUTFILE_sites"
+Rscript 01_scripts/utils/make_sites_list_maxdepth_simple.R "$INFILE" "$OUTFILE_sites"
 
 ## Index sites
 angsd sites index $OUTFILE_sites
@@ -126,7 +126,7 @@ $NGSPARALOG calcLR \
     -minQ $MIN_Q -minind $MIN_IND -mincov $MIN_DEPTH -allow_overwrite 1
 
 ## Convert ngsparalog output in list of canonical and deviant SNPs based on p-value threshold
-Rscript 01_scripts/Rscripts/convert_ngsparalog_to_sitelist.R \
+Rscript 01_scripts/utils/convert_ngsparalog_to_sitelist.R \
     $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".ngsparalog \
     $OUTFILE_sites $PVAL_THRESHOLD
 
