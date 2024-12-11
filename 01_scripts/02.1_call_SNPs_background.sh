@@ -11,6 +11,7 @@ GENOME="03_genome/genome.corrected.fasta"
 BAMLIST="02_infos/bam.filelist"
 CHR_LIST="02_infos/chrs.txt"
 REGION_LIST="02_infos/regions_to_keep.txt"
+REGION_BED="02_infos/regions_to_keep.bed"
 
 POP_FILE1="02_infos/pop.txt"
 ID_POP="02_infos/ID_POP.txt"
@@ -118,17 +119,28 @@ gunzip -f $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$M
 INFILE=$SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".mafs
 OUTFILE_sites=$SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
 BED_FILE=$SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".bed
+FILT_BED_FILE=$SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_filt.bed
 
 Rscript 01_scripts/utils/make_sites_list_maxdepth_simple.R "$INFILE" "$OUTFILE_sites"
 
 ## Index sites
 angsd sites index $OUTFILE_sites
 
+# 3. Filter out SNPs located in excluded regions
 ## Convert site file to bed for ngsparalog
 awk '{print $1"\t"$2-1"\t"$2}' $OUTFILE_sites > $BED_FILE
 
+## Convert canonical list to bed, then filter out sites located in unwanted regions
+bedtools intersect -a $BED_FILE -b $REGION_BED > $FILT_BED_FILE
+echo "before filtering for forbidden regions: "$(wc -l $BED_FILE)" sites"
+echo "after filtering for forbidden regions: "$(wc -l $FILT_BED_FILE)" sites"
+
+## Convert site file to bed for ngsparalog
+#awk '{print $1"\t"$2-1"\t"$2}' $OUTFILE_sites > $BED_FILE
+
 # 3. Run mpileup and ngsParalog without intermidate files to calculate a likelihood ratio (LR) of mismapping reads covering each site
-samtools mpileup -b $BAMLIST -l $BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
+#samtools mpileup -b $BAMLIST -l $BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
+samtools mpileup -b $BAMLIST -l $FILT_BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
 $NGSPARALOG calcLR \
     -infile - \
     -outfile $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".ngsparalog \
