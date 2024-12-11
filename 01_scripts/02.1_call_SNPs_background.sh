@@ -76,7 +76,7 @@ MIN_IND=${MIN_IND_FLOAT%.*}
 MAX_DEPTH=$(echo "($N_IND * $MAX_DEPTH_FACTOR)" | bc -l)
 
 # 0. Prepare regions
-less $REGION_LIST | grep $CHR > $SITES_DIR/"$(basename -s '.txt' $REGION_LIST)"_"$CHR".txt # already done in main script
+#less $REGION_LIST | grep $CHR > $SITES_DIR/"$(basename -s '.txt' $REGION_LIST)"_"$CHR".txt # already done in main script
 
 
 # 1. Calculate the MAF and HWE
@@ -132,7 +132,7 @@ samtools mpileup -b $BAMLIST -l $BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
 $NGSPARALOG calcLR \
     -infile - \
     -outfile $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".ngsparalog \
-    -minQ 20 -minind $MIN_IND -mincov $MIN_DEPTH -allow_overwrite 1
+    -minQ $MIN_Q -minind $MIN_IND -mincov $MIN_DEPTH -allow_overwrite 1
 
 ## Convert ngsparalog output in list of canonical and deviant SNPs based on p-value threshold
 Rscript 01_scripts/utils/convert_ngsparalog_to_sitelist.R \
