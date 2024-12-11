@@ -3,8 +3,8 @@
 ### This script will work on all bamfiles and use ANGSD to call SNPs from the previously create list of canonical SNPs,
 ### and output genotype likelihood (beagle.gz) and MAF (maf.gz)
 
-# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 03.1_call_SNPs_canonical_{} -o log/03.1_call_SNPs_canonical_{}_%j.log /bin/sh 01_scripts/03.1_call_SNPs_canonical.sh {} &
-# srun -p small -c 4  --mem=20G -J 03.1_call_SNPs_canonical_NC_036838.1 -o log/03.1_call_SNPs_canonical_NC_036838.1_%j.log /bin/sh 01_scripts/03.1_call_SNPs_canonical.sh "NC_036838.1" &
+# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 03.1_call_SNPs_canonical_background_{} -o log/03.1_call_SNPs_canonical_background_{}_%j.log /bin/sh 01_scripts/03.1_call_SNPs_canonical_background.sh {} &
+# srun -p small -c 4  --mem=20G -J 03.1_call_SNPs_canonical_background_NC_036838.1 -o log/03.1_call_SNPs_canonical_background_NC_036838.1_%j.log /bin/sh 01_scripts/03.1_call_SNPs_canonical_background.sh "NC_036838.1" &
 
 # VARIABLES
 # Files

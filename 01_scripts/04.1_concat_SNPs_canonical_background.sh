@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 1 -J 04_concat_SNPs_canonical -o log/04_concat_SNPs_canonical_%j.log /bin/sh 01_scripts/04_concat_SNPs_canonical.sh &
+# srun -p small -c 1 -J 04_concat_SNPs_canonical_background -o log/04_concat_SNPs_canonical_background_%j.log /bin/sh 01_scripts/04.1_concat_SNPs_canonical_background.sh &
 
 # VARIABLES
 # Files
