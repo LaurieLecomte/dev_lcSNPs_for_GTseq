@@ -14,7 +14,7 @@ BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
 BAMLIST="02_infos/bam.filelist"
-REGIONS="02_infos/regions_to_keep.txt"
+REGION_LIST="02_infos/regions_to_keep.txt"
 
 CHR=$1
 
@@ -62,7 +62,7 @@ MIN_IND=${MIN_IND_FLOAT%.*}
 MAX_DEPTH=$(echo "($N_IND * $MAX_DEPTH_FACTOR)" | bc -l)
 
 # 0. Prepare regions
-#less $REGIONS | grep $CHR > $SITES_DIR/"$(basename -s '.txt' $REGIONS)"_"$CHR".txt # not required anymore if genome is masked
+less $REGION_LIST | grep $CHR > $SITES_DIR/"$(basename -s '.txt' $REGION_LIST)"_"$CHR".txt
 
 
 # 1. Calculate the MAF and HWE
@@ -76,8 +76,7 @@ angsd -P $NB_CPU -nQueueSize 50 \
 -uniqueOnly 1 -only_proper_pairs 1 \
 -minInd $MIN_IND -minMaf $MIN_MAF -setMaxDepth $MAX_DEPTH -setMinDepthInd $MIN_DEPTH \
 -b $BAMLIST \
--r "$CHR" -out $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
-#-rf $SITES_DIR/"$(basename -s '.txt' $REGIONS)"_"$CHR".txt -out $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
+-rf $SITES_DIR/"$(basename -s '.txt' $REGION_LIST)"_"$CHR".txt -out $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
 
 #main features
 #-P nb of threads -nQueueSize maximum waiting in memory (necesary to optimize CPU usage
