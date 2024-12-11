@@ -12,7 +12,7 @@ BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
 BAMLIST="02_infos/bam.filelist"
-REGIONS="02_infos/regions_to_keep.txt"
+REGION_FILE="02_infos/regions_to_keep.txt"
 
 CHR=$1
 
@@ -66,9 +66,10 @@ angsd -P $NB_CPU -nQueueSize 50 \
 -sites $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
 -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -skipTriallelic 1 \
 -uniqueOnly 1 -only_proper_pairs 1 \
--rf $SITES_DIR/"$(basename -s '.txt' $REGIONS)"_"$CHR".txt \
+-r "$CHR" \
 -b "$BAMLIST" \
 -out $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canon
+#-rf $SITES_DIR/"$(basename -s '.txt' $REGIONS)"_"$CHR".txt \
 
 #main features
 #-P nb of threads -nQueueSize maximum waiting in memory (necesary to optimize CPU usage
