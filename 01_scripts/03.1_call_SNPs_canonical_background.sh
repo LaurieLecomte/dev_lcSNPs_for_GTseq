@@ -12,6 +12,7 @@ GENOME="03_genome/genome.corrected.fasta"
 BAMLIST="02_infos/bam.filelist"
 CHR_LIST="02_infos/chrs.txt"
 REGION_LIST="02_infos/regions_to_keep.txt"
+REGION_BED="02_infos/regions_to_keep.bed"
 
 POP_FILE1="02_infos/pop.txt"
 ID_POP="02_infos/ID_POP.txt"
@@ -69,7 +70,7 @@ angsd -P $NB_CPU -nQueueSize 50 \
 -sites $SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
 -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -skipTriallelic 1 \
 -uniqueOnly 1 -only_proper_pairs 1 \
--rf $SITES_DIR/"$(basename -s '.txt' $REGIONS)"_"$CHR".txt \
+-r "$CHR:" \
 -b "$BAMLIST" \
 -out $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canon
 
