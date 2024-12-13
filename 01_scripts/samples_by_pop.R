@@ -1,12 +1,15 @@
 
 # Get number of samples by pop --------------------------------------------
-ALL_SAMPLES <- "02_infos/ID_POP.txt"
+
+argv <- commandArgs(T)
+ALL_SAMPLES <- argv[1]
+#ALL_SAMPLES <- "02_infos/ID_POP.txt"
 
 all_samples <- read.table(ALL_SAMPLES, col.names = c('ID', 'POP'))
 
 table(all_samples$POP)
 
-
+set.seed(42)
 
 # Split into a training and a test sets -----------------------------------
 MIN_POP_SIZE <- 20  # min number of samples in a given pop for it to be sampled for a test subset
