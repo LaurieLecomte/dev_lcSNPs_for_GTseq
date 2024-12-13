@@ -60,6 +60,6 @@ module load angsd/0.937
 for i in $(seq $K_MIN $K_MAX)
 do 
 	echo $i
-	$NGSADMIX -P $NB_CPU -likes $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz \
+	$NGSADMIX -P $NB_CPU -likes $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz \
 	-minMaf $MIN_MAF -K $i -o $ADMIX_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_K"$i"
 done

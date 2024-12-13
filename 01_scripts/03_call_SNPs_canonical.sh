@@ -64,12 +64,12 @@ echo "filter on allele frequency = $MIN_MAF"
 angsd -P $NB_CPU -nQueueSize 50 \
 -domaf 1 -GL 2 -doGlf 2 -doMajorMinor 1 \
 -ref $GENOME \
--sites $SITES_DIR/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
+-sites $SITES_DIR/all/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical \
 -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -skipTriallelic 1 \
 -uniqueOnly 1 -only_proper_pairs 1 \
 -r "$CHR" \
 -b "$BAMLIST" \
--out $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canon
+-out $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canon
 
 #main features
 #-P nb of threads -nQueueSize maximum waiting in memory (necesary to optimize CPU usage

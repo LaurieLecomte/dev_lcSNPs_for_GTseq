@@ -149,7 +149,7 @@ echo "after filtering for forbidden regions: "$(wc -l $FILT_BED_FILE)" sites"
 samtools mpileup -b $BAMLIST -l $FILT_BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
 $NGSPARALOG calcLR \
     -infile - \
-    -outfile $SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".ngsparalog \
+    -outfile $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR".ngsparalog \
     -minQ $MIN_Q -minind $MIN_IND -mincov $MIN_DEPTH -allow_overwrite 1
 
 ## Convert ngsparalog output in list of canonical and deviant SNPs based on p-value threshold
@@ -160,3 +160,4 @@ Rscript 01_scripts/utils/convert_ngsparalog_to_sitelist.R \
 ## Index
 angsd sites index "$OUTFILE_sites"_deviant
 angsd sites index "$OUTFILE_sites"_canonical
+echo "$(less "$OUTFILE_sites"_canonical | wc -l) sites remaining after removing deviant SNPs"

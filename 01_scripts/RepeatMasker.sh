@@ -3,7 +3,7 @@
 # Detect repeats in the final SaFo assembly using the custom repeat elements library made with RepeatModeler AND repeats for Salmonidae in famdb
 
 # Run on Manitou
-# srun -p medium -c 10 --mem=50G --time=7-00:00:00 -J 02.2_final_RepeatMasker -o log/02.2_final_RepeatMasker_%j.log /bin/sh 01_scripts/02.2_final_RepeatMasker.sh &
+# srun -p medium -c 10 --mem=50G --time=7-00:00:00 -J RepeatMasker -o log/RepeatMasker_%j.log /bin/sh 01_scripts/RepeatMasker.sh &
 
 
 # VARIABLES
@@ -17,7 +17,7 @@ DB_NAME="saal"
 FAMILY="Salmonidae"
 SPECIES="Salvelinus"
 CLASS_LIB="$RMOD_DIR/"$DB_NAME"-families.fa" #outputted by RepeatModeler.sh
-FAM_LIB="$RMAS_DIR/famdb_$FAMILY_desc.fa" #created in current script
+FAM_LIB="$RMAS_DIR/famdb_"$FAMILY"_desc.fa" #created in current script
 
 COMB_LIB="$RMAS_DIR/combined_"$DB_NAME"_"$FAMILY"_desc.fa" # we use the custom library produced by the final_NCBI_RepeatMasker_famdb.sh script
 
@@ -32,6 +32,11 @@ module load python/2.7
 
 
 
+if [[ ! -d $RMAS_DIR ]]
+then
+  mkdir $RMAS_DIR
+fi
+
 # 1. Create custom lib using the famdb utility
 famdb.py families --format 'fasta_name' --descendants $FAMILY --include-class-in-name > $FAM_LIB
 
@@ -41,6 +46,7 @@ if [[ -f "${CLASS_LIB%.*}"_renamed.fa ]]
 then
   rm "${CLASS_LIB%.*}"_renamed.fa
 fi
+
 ## First edit sequence header in the RepeatModeler lib
 less $CLASS_LIB | while read line; do echo $line | sed -E "s/(^.+)\ \(.+/\1\ \@$SPECIES/" >> "${CLASS_LIB%.*}"_renamed.fa ; done
 

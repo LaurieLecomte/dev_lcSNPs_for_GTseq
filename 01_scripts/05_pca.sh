@@ -64,7 +64,7 @@ module load R/4.2
 
 
 #this is the input file for the pca
-INPUT="$SNP_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz"
+INPUT="$SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz"
 
 echo "analyse covariance matrix on all individuals"
 pcangsd --threads $NB_CPU -b $INPUT -o $PCA_DIR/"$(basename -s '.beagle.gz' $INPUT)"

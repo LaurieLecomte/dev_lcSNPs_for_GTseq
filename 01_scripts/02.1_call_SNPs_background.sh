@@ -46,6 +46,8 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
 REALSFS="/prg/angsd/0.937/misc/realSFS"
 
+PVAL_THRESHOLD=0.001
+
 NB_CPU=4
 CHR=$1
 
@@ -91,7 +93,7 @@ angsd -P $NB_CPU -nQueueSize 50 \
 -uniqueOnly 1 -only_proper_pairs 1 \
 -minInd $MIN_IND -minMaf $MIN_MAF -setMaxDepth $MAX_DEPTH -setMinDepthInd $MIN_DEPTH \
 -b $BAMLIST \
--rf $SITES_DIR/"$(basename -s '.txt' $REGION_LIST)"_"$CHR".txt -out $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
+-r "$CHR:" -out $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"
 
 #main features
 #-P nb of threads -nQueueSize maximum waiting in memory (necesary to optimize CPU usage
@@ -154,3 +156,4 @@ Rscript 01_scripts/utils/convert_ngsparalog_to_sitelist.R \
 ## Index
 angsd sites index "$OUTFILE_sites"_deviant
 angsd sites index "$OUTFILE_sites"_canonical
+echo "$(less "$OUTFILE_sites"_canonical | wc -l) sites remaining after removing deviant SNPs"
