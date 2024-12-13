@@ -55,6 +55,7 @@ CHR=$1
 module load angsd/0.937
 module load samtools/1.15
 module load R/4.2
+module load bedtools/2.31.1
 
 # Increase number of opened file limit
 ulimit -S -n 2048
