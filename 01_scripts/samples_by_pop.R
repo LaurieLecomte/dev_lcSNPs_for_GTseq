@@ -1,8 +1,8 @@
 
 # Get number of samples by pop --------------------------------------------
-ALL_SAMPLES <- "/project/lbernatchez/users/lalec31/projets_labo/Bastien/GTseq_saal_202410/dev_lcSNPs_for_GTseq/02_infos/samples_Bastien_Xavier_ID_POP_TYPE.txt"
+ALL_SAMPLES <- "02_infos/ID_POP.txt"
 
-all_samples <- read.table(ALL_SAMPLES, col.names = c('ID', 'POP', 'TYPE')) [, 1:2]
+all_samples <- read.table(ALL_SAMPLES, col.names = c('ID', 'POP'))
 
 table(all_samples$POP)
 
