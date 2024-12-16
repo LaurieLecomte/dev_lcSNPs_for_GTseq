@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p medium -c 8 --mem=30G -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
+# srun -p medium -c 10 --mem=50G -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
 
 # VARIABLES
 GENOME="03_genome/genome.corrected.fasta"
@@ -42,7 +42,7 @@ K_MIN=2 #min nb of pop to consider for NGS admix
 K_MAX=5 #maximum nb of pop to consider for NGS admix
 
 
-NB_CPU=8 #change accordingly to the -c argument in srun, 
+NB_CPU=10 #change accordingly to the -c argument in srun, 
 
 PVAL_THRESHOLD=0.001
 #REGION_NUM="$1" 

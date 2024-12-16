@@ -5,8 +5,8 @@
 ### to produce list of canonical and deviant SNPs
 
 
-# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 02_call_SNPs_all_{} -o log/02_call_SNPs_all_{}_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh {} &
-# srun -p small -c 4 --mem=20G -J 02_call_SNPs_all_NC_036838.1 -o log/02_call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh "NC_036838.1" &
+# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=50G -J 02_call_SNPs_all_{} -o log/02_call_SNPs_all_{}_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh {} &
+# srun -p small -c 4 --mem=50G -J 02_call_SNPs_all_NC_036838.1 -o log/02_call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh "NC_036838.1" &
 
 # VARIABLES
 GENOME="03_genome/genome.corrected.fasta"

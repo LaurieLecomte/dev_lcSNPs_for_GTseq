@@ -2,8 +2,8 @@
 
 #Produce a list of background SNPs to filter candidate SNPs called using more stringent filters 
 
-# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=20G -J 02.1_call_SNPs_all_background_{} -o log/02.1_call_SNPs_all_background_{}_%j.log /bin/sh 01_scripts/02.1_call_SNPs_background.sh {} &
-# srun -p small -c 4 --mem=20G -J 02.1_call_SNPs_all_background_NC_036838.1 -o log/02.1_call_SNPs_all_NC_036838.1_background_%j.log /bin/sh 01_scripts/02.1_call_SNPs_background.sh "NC_036838.1" &
+# less 02_infos/chrs.txt | parallel -j10 srun -p small -c 4 --mem=50G -J 02.1_call_SNPs_all_background_{} -o log/02.1_call_SNPs_all_background_{}_%j.log /bin/sh 01_scripts/02.1_call_SNPs_background.sh {} &
+# srun -p small -c 4 --mem=50G -J 02.1_call_SNPs_all_background_NC_036838.1 -o log/02.1_call_SNPs_all_NC_036838.1_background_%j.log /bin/sh 01_scripts/02.1_call_SNPs_background.sh "NC_036838.1" &
 
 # VARIABLES
 # Files
