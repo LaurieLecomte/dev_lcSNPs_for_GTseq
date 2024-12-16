@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p medium -c 10 --mem=50G -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
+# srun -p medium -c 10 --mem=50G --time=7-00:00 -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
 
 # VARIABLES
 GENOME="03_genome/genome.corrected.fasta"
