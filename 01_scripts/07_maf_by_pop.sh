@@ -16,7 +16,7 @@ MAF_DIR="08_maf_by_pop"
 
 
 CHR_LIST="02_infos/chrs.txt"
-ID_POP="02_infos/ID_POP_40.txt" ###CORRIGER 
+ID_POP="02_infos/ID_POP.txt" 
 
 POP_FILE1="02_infos/pop.txt"
 
@@ -105,7 +105,6 @@ ulimit -S -n 2048
   echo "working on pop $POP, $N_IND individuals, will use the sites file provided"
   echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
   
-  ##### CORRECT MIN_IND
   angsd -P $NB_CPU -nQueueSize 50 -doMaf 1 -GL 2 -doMajorMinor 4 \
   -ref $GENOME -rf $CHR_LIST -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites -b 02_infos/"$POP"bam.filelist -out $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
   
