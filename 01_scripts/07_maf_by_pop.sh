@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # srun -p medium -c 10 --mem=50G --time=7-00:00 -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
+# parallel -a 02_infos/pop.txt -j 10 srun -p medium -c 10 --mem=50G --time=3-00:00 -J 07_maf_by_pop_{} -o log/07_maf_by_pop_{}_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh {} &
 
 # VARIABLES
 GENOME="03_genome/genome.corrected.fasta"
@@ -52,6 +53,8 @@ PVAL_THRESHOLD=0.001
 NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
 
+POP=$1
+
 # LOAD REQUIRED MODULES
 module load angsd/0.937
 #module load samtools/1.15
@@ -63,50 +66,50 @@ ulimit -S -n 2048
 
 
 # Before analysis : combine per-chromosome canonical SNP lists
-if [[ -f 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites ]]
-then
-  rm 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
-fi
+#if [[ -f 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites ]]
+#then
+#  rm 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
+#fi
 
-less $CHR_LIST | while read CHR; do less $SITES_DIR/all/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical >> 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites; done 
+#less $CHR_LIST | while read CHR; do less $SITES_DIR/all/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical >> 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites; done 
 
 ## Index this sites file
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
+#angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
 
 # Prepare a list of sites with major and minor allele fields to use with -doMajorMinor 3 if required 
-less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tail -n+2 | cut -f1-4 > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
+#less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tail -n+2 | cut -f1-4 > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
+#angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
 
 # Replace spaces by tabs for later steps
-less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tr ' ' '\t' > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list
+#less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tr ' ' '\t' > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list
 
 
 
 
 # Do maf for all population listed
-cat $POP_FILE1 | while read i
-do
-  echo $i
-  mkdir $MAF_DIR/$i
+#cat $POP_FILE1 | while read i
+#do
+  echo $POP
+  mkdir $MAF_DIR/$POP
   
   # Make a list of bam files for a given population #### to correct 
-  #less $ID_POP | awk -v val="$i" 'BEGIN{FS="\t"} $2 == val {print}' | cut -f1 > $MAF_DIR/$i/"$i".samples
-  #less $BAMLIST | grep -f $MAF_DIR/$i/"$i".samples > $MAF_DIR/$i/"$i"bam.filelist
+  #less $POPD_POP | awk -v val="$POP" 'BEGIN{FS="\t"} $2 == val {print}' | cut -f1 > $MAF_DIR/$POP/"$POP".samples
+  #less $BAMLIST | grep -f $MAF_DIR/$POP/"$POP".samples > $MAF_DIR/$POP/"$POP"bam.filelist
   
-  less $BAMLIST | grep $i > 02_infos/"$i"bam.filelist
+  less $BAMLIST | grep $POP > 02_infos/"$POP"bam.filelist
   
-  N_IND=$(wc -l 02_infos/"$i"bam.filelist | cut -d " " -f 1)
+  N_IND=$(wc -l 02_infos/"$POP"bam.filelist | cut -d " " -f 1)
   MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
   MIN_IND=${MIN_IND_FLOAT%.*} 
   
-  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
+  echo "working on pop $POP, $N_IND individuals, will use the sites file provided"
   echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
   
   ##### CORRECT MIN_IND
   angsd -P $NB_CPU -nQueueSize 50 -doMaf 1 -GL 2 -doMajorMinor 4 \
-  -ref $GENOME -rf $CHR_LIST -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites -b 02_infos/"$i"bam.filelist -out $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+  -ref $GENOME -rf $CHR_LIST -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites -b 02_infos/"$POP"bam.filelist -out $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
   
   
-  gunzip -c $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs.gz > $MAF_DIR/$i/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs
-done
+  gunzip -c $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs.gz > $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs
+#done
 
