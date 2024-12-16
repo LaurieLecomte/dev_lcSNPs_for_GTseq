@@ -170,6 +170,10 @@ with open(input_selected_snps) as infile:
             seq = list(genome[chrom][left: right])
             seq_original = seq[:]
 
+            if len(seq) < 2 * window_size + 1:
+                print("Flushed a SNP that was too close to one end of a scaffold")
+                continue
+
             # Use compression, patterns, GC content...
             complexity = len(gzip.compress("".join(seq).encode()))
             gc_content = (seq.count("G") + seq.count("C")) / (len(seq) - seq.count("N"))
