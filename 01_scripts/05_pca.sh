@@ -43,7 +43,7 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 
 CHR_LIST="02_infos/chrs.txt"
 
-ID_POP="02_infos/ID_POP_49.txt" #### CORRIGER
+ID_POP="02_infos/ID_POP.txt" #### CORRIGER
 
 #maybe edit
 NB_CPU=4 #change accordingly in SLURM header
