@@ -23,7 +23,7 @@ MAF_DIR="08_maf_by_pop"
 FST_DIR="09_fst"
 
 CHR_LIST="02_infos/chrs.txt"
-ID_POP="02_infos/ID_POP_40.txt" ### CORRIGER
+ID_POP="02_infos/ID_POP.txt" 
 
 POP_FILE1="02_infos/pop.txt"
 
@@ -108,7 +108,7 @@ do
   -dosaf 5 -GL 2 -doMajorMinor 4 \
   -ref $GENOME \
   -rf $REGION_LIST \
-  -remove_bads 1 -minMapQ 30 -minQ 20 -minInd 1 -setMinDepthInd $MIN_DEPTH \
+  -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
   -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites \
   -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
 done
