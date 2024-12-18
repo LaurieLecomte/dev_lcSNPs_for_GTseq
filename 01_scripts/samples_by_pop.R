@@ -21,10 +21,13 @@ training_set <- character()
 
 for (pop in unique(all_samples$POP)){
   pop_set <- subset(all_samples, POP == pop)
+  pop_size <- nrow(pop_set)
+  to_sample <- min(MIN_SAMPLES, (pop_size - MIN_POP_SIZE))
+  
   # Check number of samples available for pop
   if (nrow(pop_set) >= MIN_POP_SIZE){
     # Substract samples for testing
-    test_IDs <- sample(x = pop_set$ID, size = TO_SAMPLE, replace = FALSE)
+    test_IDs <- sample(x = pop_set$ID, size = to_sample, replace = FALSE)
     training_IDs <- pop_set$ID[!pop_set$ID %in% test_IDs]
     
     test_set <- append(test_set, test_IDs)
