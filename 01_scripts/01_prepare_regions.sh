@@ -46,15 +46,17 @@ sort-bed 02_infos/excluded_intervals.bed > 02_infos/excluded_intervals.sorted.be
 
 
 
+# Get list of regions to keep 
+bedtools subtract -a 02_infos/chrs.sorted.bed -b 02_infos/excluded_intervals.sorted.bed > 02_infos/regions_to_keep.bed
+less 02_infos/regions_to_keep.bed | sed -E 's/\t/:/' | sed -E 's/\t/-/' > 02_infos/regions_to_keep.txt
+
+
 # Mask regions to exclude in the genome fasta
 bedtools maskfasta -mc N -fi $FASTA -bed 02_infos/excluded_intervals.sorted.bed -fo "${FASTA%.*}".corrected.fasta
 
 # Index 
 samtools faidx "${FASTA%.*}".corrected.fasta
 
-# Get list of regions to keep 
-bedtools subtract -a 02_infos/chrs.sorted.bed -b 02_infos/excluded_intervals.sorted.bed > 02_infos/regions_to_keep.bed
-less 02_infos/regions_to_keep.bed | sed -E 's/\t/:/' | sed -E 's/\t/-/' > 02_infos/regions_to_keep.txt
 
 #bedops --partition 02_infos/chrs.sorted.bed 02_infos/excluded_intervals.sorted.bed > 02_infos/chrs_excluded_intervals.partition.bed
 
