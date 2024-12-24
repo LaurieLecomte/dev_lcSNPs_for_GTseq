@@ -65,26 +65,6 @@ module load angsd/0.937
 ulimit -S -n 2048
 
 
-# Before analysis : combine per-chromosome canonical SNP lists
-if [[ -f 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites ]]
-then
-  rm 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
-fi
-
-less $CHR_LIST | while read CHR; do less $SITES_DIR/all/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$CHR"_canonical >> 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites; done 
-
-## Index this sites file
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites
-
-# Prepare a list of sites with major and minor allele fields to use with -doMajorMinor 3 if required 
-less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tail -n+2 | cut -f1-4 > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
-angsd sites index 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.sites
-
-# Replace spaces by tabs for later steps
-less $SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tr ' ' '\t' > 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list
-
-
-
 
 # Do maf for all population listed
 #cat $POP_FILE1 | while read i
