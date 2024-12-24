@@ -73,6 +73,13 @@ ulimit -S -n 2048
 #bgzip -f $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle
 
 # MAFS
+
+if [[ -f $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs ]]
+then
+  rm $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
+fi
+
+
 # 1. Extract header for 1st chr : 
 ## Extract header from maf for first chr and initialize output file. We have already identified the 1st chromosome in previous step.
 zless $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$FIRST_CHR".mafs | head -n1 > $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
