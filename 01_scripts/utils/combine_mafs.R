@@ -1,7 +1,7 @@
 argv <- commandArgs(T)
 SITES <- argv[1]
 POP_FILE <- argv[2]
-SUFFIX <- argv[3]
+MAFS <- argv[3]
 
 #SITES <- "/project/lbernatchez/users/lalec31/projets_labo/Bastien/GTseq_saal_202410/dev_lcSNPs_for_GTseq/02_infos/sites_all_maf0.05_pctind0.65_maxdepth10_canonical_minmaj.list"
 #POP_FILE <- "02_infos/pop.txt"
@@ -19,9 +19,9 @@ pops <- read.table(POP_FILE, col.names = 'pop')
 combined <- sites[, c('chromo', 'position')]
 
 for (pop in pops$pop){
-  pop_maf <- paste0("08_maf_by_pop/", pop, '/', pop, '_', SUFFIX)
+  #pop_maf <- paste0("08_maf_by_pop/", pop, '/', pop, '_', SUFFIX)
   #assign(x = pop, value = as.data.frame(fread(pop_maf)[, c(1,2,6)]))
-  pop_df <- (fread(pop_maf)[, c(1,2,6)])
+  pop_df <- (fread(MAFS)[, c(1,2,6)])
   colnames(pop_df)[3] <- eval(pop)
   combined <- merge(combined, pop_df, by = c('chromo', 'position'), all = TRUE)
 }
@@ -30,5 +30,5 @@ colnames(combined) <- c('ChromName', 'pos', colnames(combined)[3:length(colnames
 
 # Remove NAs
 combined <- na.omit(combined)
-write.table(combined, file = paste0('08_maf_by_pop/', SUFFIX, '_combined.mafs'), 
+write.table(combined, file = paste0('08_maf_by_pop/', strsplit(x = COV_MAT, split = '.mafs')[[1]], '_combined.mafs'), 
             col.names = TRUE, row.names = FALSE, quote = FALSE, sep = "\t")

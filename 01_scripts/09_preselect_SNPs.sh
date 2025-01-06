@@ -61,14 +61,14 @@ module load python/3.7
 module load R/4.2
 
 # 1. Combine per-site mafs across all populations into a single file
-Rscript 01_scripts/utils/combine_mafs.R 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $POP_FILE1 all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+Rscript 01_scripts/utils/combine_mafs.R 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $POP_FILE1 $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs
 
 # 2. Calculate pairwise AFDs (Allele Frequency Differences)
-python3 01_scripts/utils/01_compute_pairwise_AFDs.py $MAF_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.mafs $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds
+python3 01_scripts/utils/01_compute_pairwise_AFDs.py $MAF_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.mafs $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds
 
 # 3. Prefilter SNPs on AFDs
 MIN_AFD=0.1 # decr to 0.1
-python3 01_scripts/utils/02_pre_filter_SNPs_on_pairwise_AFDs.py $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $MIN_AFD $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids
+python3 01_scripts/utils/02_pre_filter_SNPs_on_pairwise_AFDs.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $MIN_AFD $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids
 
 # 4. Score SNPs and determine thresholds of complexity, GC contents, MAF sum and number of neighbor background SNPs (from list of background SNPs produced by scrips 02.1, 03.1 and 04.1)
 WIN=100
