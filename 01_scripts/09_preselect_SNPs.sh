@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p medium -c 1 --mem=50G -J 09_preselect_SNPs -o log/09_preselect_SNPs_%j.log /bin/sh 01_scripts/09_preselect_SNPs.sh &
+# srun -p medium -c 1 --mem=50G -J 09_preselect_SNPs -o log/09_preselect_SNPs_%j.log /bin/sh 01_scripts/09_preselect_SNPs.sh "02_infos/sites_by_chr/background/sites_all_maf0.01_pctind0.50_maxdepth10_canonical_minmaj.list" &
 
 # VARIABLES
 # Files
@@ -56,6 +56,8 @@ NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
 REALSFS="/prg/angsd/0.937/misc/realSFS"
 
 
+BACKGROUND=$2 # list of less stringent, background SNPs
+
 # LOAD REQUIRED MODULES
 module load python/3.7
 module load R/4.2
@@ -72,7 +74,7 @@ python3 01_scripts/utils/02_pre_filter_SNPs_on_pairwise_AFDs.py $SELECT_DIR/maf"
 
 # 4. Score SNPs and determine thresholds of complexity, GC contents, MAF sum and number of neighbor background SNPs (from list of background SNPs produced by scrips 02.1, 03.1 and 04.1)
 WIN=100
-python3 01_scripts/utils/03_score_SNPs_for_GTseq.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids $SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $GENOME $WIN $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
+python3 01_scripts/utils/03_score_SNPs_for_GTseq.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids $BACKGROUND $GENOME $WIN $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
 
 # 4. Plot metrics to decide thresholds
 Rscript 01_scripts/utils/04.1_plot_metrics.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
