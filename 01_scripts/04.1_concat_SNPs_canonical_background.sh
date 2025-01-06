@@ -89,7 +89,7 @@ zless $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_D
 less $CHR_LIST | while read CHR
 do
   # extract the right beagle file for a given chr 
-	MAFS_FILE=$(ls -1 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canon.mafs.gz | grep $CHR) # extract the right beagle file for a given chr 
+	MAFS_FILE=$(ls -1 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canon.mafs | grep $CHR) # extract the right beagle file for a given chr 
 	echo "appending file $MAFS_FILE"
   # Extract all lines except first one and append to ALL_CHR.mafs
   zless $MAFS_FILE  | grep -v ^chromo >> $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
