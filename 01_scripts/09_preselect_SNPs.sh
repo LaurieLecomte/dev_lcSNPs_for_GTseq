@@ -64,7 +64,7 @@ module load R/4.2
 Rscript 01_scripts/utils/combine_mafs.R 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $POP_FILE1 maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
 
 # 2. Calculate pairwise AFDs (Allele Frequency Differences)
-python3 01_scripts/utils/01_compute_pairwise_AFDs.py $MAF_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.mafs $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds
+python3 01_scripts/utils/01_compute_pairwise_AFDs.py $MAF_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.mafs $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds
 
 # 3. Prefilter SNPs on AFDs
 MIN_AFD=0.1 # decr to 0.1
@@ -72,7 +72,7 @@ python3 01_scripts/utils/02_pre_filter_SNPs_on_pairwise_AFDs.py $SELECT_DIR/maf"
 
 # 4. Score SNPs and determine thresholds of complexity, GC contents, MAF sum and number of neighbor background SNPs (from list of background SNPs produced by scrips 02.1, 03.1 and 04.1)
 WIN=100
-python3 01_scripts/utils/03_score_SNPs_for_GTseq.py $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids $SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $GENOME $WIN $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
+python3 01_scripts/utils/03_score_SNPs_for_GTseq.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds_"$MIN_AFD".ids $SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $GENOME $WIN $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
 
 # 4. Plot metrics to decide thresholds
-Rscript 01_scripts/utils/04.1_plot_metrics.R $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
+Rscript 01_scripts/utils/04.1_plot_metrics.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN"
