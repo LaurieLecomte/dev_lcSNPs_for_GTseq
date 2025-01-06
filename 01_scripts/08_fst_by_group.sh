@@ -25,7 +25,7 @@ FST_DIR="09_fst"
 CHR_LIST="02_infos/chrs.txt"
 ID_POP="02_infos/ID_POP.txt" 
 
-POP_FILE1="02_infos/pop.txt"
+POP_FILE1="02_infos/pops.txt"
 
 REGION_LIST="02_infos/regions_to_keep.txt"
 

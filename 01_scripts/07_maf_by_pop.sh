@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # srun -p medium -c 10 --mem=50G --time=7-00:00 -J 07_maf_by_pop -o log/07_maf_by_pop_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh &
-# parallel -a 02_infos/pop.txt -j 10 srun -p medium -c 10 --mem=50G --time=3-00:00 -J 07_maf_by_pop_{} -o log/07_maf_by_pop_{}_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh {} &
+# parallel -a 02_infos/pops.txt -j 10 srun -p medium -c 10 --mem=50G --time=3-00:00 -J 07_maf_by_pop_{} -o log/07_maf_by_pop_{}_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh {} &
 
 # VARIABLES
 GENOME="03_genome/genome.corrected.fasta"
@@ -18,7 +18,7 @@ MAF_DIR="08_maf_by_pop"
 CHR_LIST="02_infos/chrs.txt"
 ID_POP="02_infos/ID_POP.txt" 
 
-POP_FILE1="02_infos/pop.txt"
+POP_FILE1="02_infos/pops.txt"
 
 REGION_LIST="02_infos/regions_to_keep.txt"
 

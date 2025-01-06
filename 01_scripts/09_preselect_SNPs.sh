@@ -9,7 +9,7 @@ BAMLIST="02_infos/bam.filelist"
 CHR_LIST="02_infos/chrs.txt"
 REGION_LIST="02_infos/regions_to_keep.txt"
 
-POP_FILE1="02_infos/pop.txt"
+POP_FILE1="02_infos/pops.txt"
 ID_POP="02_infos/ID_POP.txt"
 
 # Directories
