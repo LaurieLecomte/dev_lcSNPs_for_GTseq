@@ -1,6 +1,6 @@
 argv <- commandArgs(T)
 SITES <- argv[1]
-POP_LIST <- argv[2]
+POP_FILE <- argv[2]
 SUFFIX <- argv[3]
 
 #SITES <- "/project/lbernatchez/users/lalec31/projets_labo/Bastien/GTseq_saal_202410/dev_lcSNPs_for_GTseq/02_infos/sites_all_maf0.05_pctind0.65_maxdepth10_canonical_minmaj.list"
