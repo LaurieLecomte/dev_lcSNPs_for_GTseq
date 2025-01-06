@@ -19,7 +19,7 @@ pops <- read.table(POP_FILE, col.names = 'pop')
 combined <- sites[, c('chromo', 'position')]
 
 for (pop in pops$pop){
-  pop_maf <- paste0("08_maf_by_pop/", pop, '/', pop, SUFFIX)
+  pop_maf <- paste0("08_maf_by_pop/", pop, '/', pop, '_', SUFFIX)
   #assign(x = pop, value = as.data.frame(fread(pop_maf)[, c(1,2,6)]))
   pop_df <- (fread(pop_maf)[, c(1,2,6)])
   colnames(pop_df)[3] <- eval(pop)
