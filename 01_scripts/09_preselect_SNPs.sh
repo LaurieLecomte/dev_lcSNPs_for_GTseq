@@ -61,7 +61,7 @@ module load python/3.7
 module load R/4.2
 
 # 1. Combine per-site mafs across all populations into a single file
-Rscript 01_scripts/utils/combine_mafs.R 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $POP_FILE1 $MAF_DIR/$POP/"$POP"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".mafs
+Rscript 01_scripts/utils/combine_mafs.R 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list $POP_FILE1 maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
 
 # 2. Calculate pairwise AFDs (Allele Frequency Differences)
 python3 01_scripts/utils/01_compute_pairwise_AFDs.py $MAF_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.mafs $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds
