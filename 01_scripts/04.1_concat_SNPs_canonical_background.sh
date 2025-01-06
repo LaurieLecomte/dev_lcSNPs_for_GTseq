@@ -83,13 +83,13 @@ fi
 # 1. Extract header for 1st chr : 
 ## Extract header from maf for first chr and initialize output file
 FIRST_CHR=$(less $CHR_LIST | head -n1) 
-zless $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$FIRST_CHR".mafs | head -n1 > $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
+zless $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$FIRST_CHR"_canon.mafs | head -n1 > $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
 
 # 2. Append beagles contents for all chromosomes
 less $CHR_LIST | while read CHR
 do
   # extract the right beagle file for a given chr 
-	MAFS_FILE=$(ls -1 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*.mafs | grep $CHR) # extract the right beagle file for a given chr 
+	MAFS_FILE=$(ls -1 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canon.mafs.gz | grep $CHR) # extract the right beagle file for a given chr 
 	echo "appending file $MAFS_FILE"
   # Extract all lines except first one and append to ALL_CHR.mafs
   zless $MAFS_FILE  | grep -v ^chromo >> $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
