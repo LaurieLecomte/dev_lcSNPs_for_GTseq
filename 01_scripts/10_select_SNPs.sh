@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 1 --mem=50G -J 10_select_SNPs -o log/10_select_SNPs_%j.log /bin/sh 01_scripts/10_select_SNPs.sh &
+# srun -p small -c 1 --mem=50G -J 10_select_SNPs -o log/10_select_SNPs_%j.log /bin/sh 01_scripts/10_select_SNPs.sh 12.6 &
 
 # VARIABLES
 # Files
@@ -60,15 +60,15 @@ REALSFS="/prg/angsd/0.937/misc/realSFS"
 module load python/3.7
 module load R/4.2
 
-MIN_AFD=0.4
-WIN=50
+MIN_AFD=0.1
+WIN=100
 MAX_MAF=2
 MAX_NUM_SNP=10
-MIN_COMPLEX=60
+MIN_COMPLEX=100
 MIN_GC=0.2
-MAX_GC=0.8
+MAX_GC=0.7
 
-TARGET_SUM=12.6
+TARGET_SUM=$1
 EXP=2
 MIN_DIST=10000
 
