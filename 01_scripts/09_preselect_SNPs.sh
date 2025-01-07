@@ -56,7 +56,7 @@ NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
 REALSFS="/prg/angsd/0.937/misc/realSFS"
 
 
-BACKGROUND=$2 # list of less stringent, background SNPs
+BACKGROUND=$1 # list of less stringent, background SNPs
 
 # LOAD REQUIRED MODULES
 module load python/3.7
