@@ -73,10 +73,10 @@ EXP=2
 MIN_DIST=10000
 
 # 1. Filter SNPs based on established thresholds
-Rscript 01_scripts/utils/04.2_filter_SNPs.R $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN" $MAX_MAF $MAX_NUM_SNP $MIN_COMPLEX $MIN_GC $MAX_GC
+Rscript 01_scripts/utils/04.2_filter_SNPs.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN" $MAX_MAF $MAX_NUM_SNP $MIN_COMPLEX $MIN_GC $MAX_GC
 
 # 2. 
-python3 01_scripts/utils/05_extract_AFDs_wanted_SNPs.py $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds 
+python3 01_scripts/utils/05_extract_AFDs_wanted_SNPs.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds 
 
 # 3. 
-python3 01_scripts/utils/06_select_best_SNPs_pairwise.py $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds  $TARGET_SUM $EXP $MIN_DIST $SELECT_DIR/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good."$TARGET_SUM".tsv
+python3 01_scripts/utils/06_select_best_SNPs_pairwise.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds  $TARGET_SUM $EXP $MIN_DIST $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good."$TARGET_SUM".tsv
