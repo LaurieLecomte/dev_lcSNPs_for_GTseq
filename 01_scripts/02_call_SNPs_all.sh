@@ -137,13 +137,6 @@ bedtools intersect -a $BED_FILE -b $REGION_BED > $FILT_BED_FILE
 echo "before filtering for forbidden regions: "$(wc -l $BED_FILE)" sites"
 echo "after filtering for forbidden regions: "$(wc -l $FILT_BED_FILE)" sites"
     
-#Rscript 01_scripts/utils/make_sites_list_maxdepth_simple.R "$INFILE" "$OUTFILE_sites"
-
-## Index sites
-#angsd sites index $OUTFILE_sites
-
-## Convert site file to bed for ngsparalog
-#awk '{print $1"\t"$2-1"\t"$2}' $OUTFILE_sites > $BED_FILE
 
 # 3. Run mpileup and ngsParalog without intermidate files to calculate a likelihood ratio (LR) of mismapping reads covering each site
 #samtools mpileup -b $BAMLIST -l $BED_FILE -r $CHR -q 0 -Q 0 --ff UNMAP,DUP |
@@ -162,3 +155,7 @@ Rscript 01_scripts/utils/convert_ngsparalog_to_sitelist.R \
 angsd sites index "$OUTFILE_sites"_deviant
 angsd sites index "$OUTFILE_sites"_canonical
 echo "$(less "$OUTFILE_sites"_canonical | wc -l) sites remaining after removing deviant SNPs"
+
+## Convert to bed for reference if needed
+awk '{print $1"\t"$2-1"\t"$2}' "$OUTFILE_sites"_deviant > "$OUTFILE_sites"_deviant.bed
+awk '{print $1"\t"$2-1"\t"$2}' "$OUTFILE_sites"_canonical > "$OUTFILE_sites"_canonical.bed

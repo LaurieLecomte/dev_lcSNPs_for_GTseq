@@ -85,10 +85,10 @@ fi
 FIRST_CHR=$(less $CHR_LIST | head -n1) 
 zless $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr"$FIRST_CHR"_canon.mafs.gz | head -n1 > $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs
 
-# 2. Append beagles contents for all chromosomes
+# 2. Append .mafs contents for all chromosomes
 less $CHR_LIST | while read CHR
 do
-  # extract the right beagle file for a given chr 
+  # extract the right .mafs file for a given chr 
 	MAFS_FILE=$(ls -1 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_chr*_canon.mafs.gz | grep $CHR) # extract the right beagle file for a given chr 
 	echo "appending file $MAFS_FILE"
   # Extract all lines except first one and append to ALL_CHR.mafs
@@ -97,3 +97,8 @@ done
 
 # Format .maf file for using a list of background SNPs at preselection step (09_preselect_SNPs.sh)
 less $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | tr ' ' '\t' > $SITES_DIR/background/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_minmaj.list
+
+
+## Convert to bed for reference if needed
+tail -n+2 $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.mafs | awk '{print $1"\t"$2-1"\t"$2"\t"$3"\t"$4"\t"$5}' > $SNP_DIR/background/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.bed
+
