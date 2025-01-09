@@ -3,15 +3,13 @@
 # srun -p medium -c 4 --mem=50G -J 08_fst_by_group -o log/08_fst_by_group_%j.log /bin/sh 01_scripts/08_fst_by_group.sh &
 
 
-
-
 ###this script will 
 #1 make a subset of bamlist to ahev equal nb of samples
 #2calculate the saf by pop
 #3 calculate 2dSFS and FST
 #it uses the last version of angsd (unfold for saf and fold for realSFS)
 
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"

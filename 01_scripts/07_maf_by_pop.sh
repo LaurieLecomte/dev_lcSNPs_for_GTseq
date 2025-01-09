@@ -4,7 +4,7 @@
 # parallel -a 02_infos/pops.txt -j 10 srun -p medium -c 10 --mem=50G --time=3-00:00 -J 07_maf_by_pop_{} -o log/07_maf_by_pop_{}_%j.log /bin/sh 01_scripts/07_maf_by_pop.sh {} &
 
 # VARIABLES
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"

@@ -8,7 +8,7 @@
 
 # VARIABLES
 # Files
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAMLIST="02_infos/bam.filelist"
 CHR_LIST="02_infos/chrs.txt"
 REGION_LIST="02_infos/regions_to_keep.txt"

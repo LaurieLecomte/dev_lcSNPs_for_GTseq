@@ -7,7 +7,7 @@
 #NGS admiw will explore all number of population between K_MIN and K_MAX as provided in the 01_config.sh
 
 # VARIABLES
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"

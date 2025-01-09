@@ -9,7 +9,7 @@
 # srun -p small -c 4 --mem=50G -J 02_call_SNPs_all_NC_036838.1 -o log/02_call_SNPs_all_NC_036838.1_%j.log /bin/sh 01_scripts/02_call_SNPs_all.sh "NC_036838.1" &
 
 # VARIABLES
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"

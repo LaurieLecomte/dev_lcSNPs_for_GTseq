@@ -3,7 +3,7 @@
 # srun -p small -c 4 -J 05_pca -o log/05_pca_%j.log /bin/sh 01_scripts/05_pca.sh & 
 
 # VARIABLES
-GENOME="03_genome/genome.corrected.fasta"
+GENOME="03_genome/genome.fasta"
 BAM_DIR="04_bam"
 SNP_DIR="05_cand_SNPs"
 SITES_DIR="02_infos/sites_by_chr"
