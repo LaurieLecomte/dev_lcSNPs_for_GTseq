@@ -1,12 +1,20 @@
 #!/bin/bash
 
-# First run RepeatModeler and RepeatMasker to get repeats, and convert the gff to bed
+# First make bed files of regions to exclude from analysis and put them in 02_infos/regions_to_exclude
 
+## Run RepeatModeler and RepeatMasker to get repeats, and convert the gff to bed:
 #module load bedops/2.4.40
 #GFF="RepeatMasker/genome.fasta.out.gff"
 #EXCL_DIR="02_infos/regions_to_exclude"
 #less $GFF | gff2bed | cut -f1-3 > $EXCL_DIR/repeats.bed 
 
+## Extract N positions in the reference fasta
+#module load seqkit/2.8.0
+#seqkit locate -P -i -r -G -p 'n+' --bed 03_genome/genome.fasta | cut -f1-3 > 02_infos/regions_to_exclude/Ns.bed
+
+## Add bed files of sex-linked regions to 02_infos/regions_to_exclude
+
+## Run this script
 # /bin/sh 01_scripts/01_prepare_regions.sh &
 
 
@@ -51,11 +59,13 @@ bedtools subtract -a 02_infos/chrs.sorted.bed -b 02_infos/excluded_intervals.sor
 less 02_infos/regions_to_keep.bed | sed -E 's/\t/:/' | sed -E 's/\t/-/' > 02_infos/regions_to_keep.txt
 
 
+
+
 # Mask regions to exclude in the genome fasta
-bedtools maskfasta -mc N -fi $FASTA -bed 02_infos/excluded_intervals.sorted.bed -fo "${FASTA%.*}".corrected.fasta
+#bedtools maskfasta -mc N -fi $FASTA -bed 02_infos/excluded_intervals.sorted.bed -fo "${FASTA%.*}".corrected.fasta
 
 # Index 
-samtools faidx "${FASTA%.*}".corrected.fasta
+#samtools faidx "${FASTA%.*}".corrected.fasta
 
 
 #bedops --partition 02_infos/chrs.sorted.bed 02_infos/excluded_intervals.sorted.bed > 02_infos/chrs_excluded_intervals.partition.bed
