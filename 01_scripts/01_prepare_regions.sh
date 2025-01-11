@@ -10,7 +10,7 @@
 
 ## Extract N positions in the reference fasta
 #module load seqkit/2.8.0
-#seqkit locate -P -i -r -G -p "n+,Y+,R+" --bed 03_genome/genome.fasta | cut -f1-3 > 02_infos/regions_to_exclude//Ns_Rs_Ys.bed
+#seqkit locate -P -i -r -G -p "n+,Y+,R+" --bed 03_genome/genome.fasta | cut -f1-3 > 02_infos/regions_to_exclude/Ns_Rs_Ys.bed
 
 ## Add bed files of sex-linked regions to 02_infos/regions_to_exclude
 
