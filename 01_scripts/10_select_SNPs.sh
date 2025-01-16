@@ -50,16 +50,6 @@ K_MAX=5 #maximum nb of pop to consider for NGS admix
 
 PVAL_THRESHOLD=0.001
 
-# Execs
-NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
-NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
-REALSFS="/prg/angsd/0.937/misc/realSFS"
-
-
-# LOAD REQUIRED MODULES
-module load python/3.7
-module load R/4.2
-
 MIN_AFD=0.1
 WIN=100
 MAX_MAF=2
@@ -72,11 +62,55 @@ TARGET_SUM=$1
 EXP=2
 MIN_DIST=10000
 
+# Blast alignment criteria
+MIN_IDY=90 #pident
+ALN_LEN=160 #length
+MAX_HIT=1 #
+
+# Execs
+NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
+NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
+REALSFS="/prg/angsd/0.937/misc/realSFS"
+
+
+# LOAD REQUIRED MODULES
+module load python/3.7
+module load R/4.2
+
+module load ncbiblast/2.6.0
+module load bedtools/2.31.1
+
+
 # 1. Filter SNPs based on established thresholds
 Rscript 01_scripts/utils/04.2_filter_SNPs.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN" $MAX_MAF $MAX_NUM_SNP $MIN_COMPLEX $MIN_GC $MAX_GC
 
+# 2. Blast each SNP's flanking sequence against reference
+## Build a fasta of flanking sequences
+FASTA="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.fasta"
+less $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv | tail -n+2 | awk '{print ">"$1 "_" $2 "\n" $14}' > $FASTA
+
+## Fist generate database from reference
+if [[ ! -f "$GENOME".nsq ]]
+  then makeblastdb -in $GENOME -dbtype nucl 
+fi
+
+## Run blast
+blastn -query $FASTA -subject $GENOME -out $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast -outfmt 6
+
+## Filter blast results: get SNPs that have >1 mapping 
+MULTIMAP="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast.multimap"
+less $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast | cut -f1 | uniq -d > $MULTIMAP
+
+## Remove multimappings and filter on aln length and identity
+less $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast | grep -vFf $MULTIMAP | awk -v a="$MIN_IDY" -v b="$ALN_LEN" '$3>=a && $4>=b' > $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.filtered_idy"$MIN_IDY"_len"$ALN_LEN".blast
+
+
+## Extract remaining SNPs from scored table
+Rscript 01_scripts/utils/extract_scored_SNPs_from_blast.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.filtered_idy"$MIN_IDY"_len"$ALN_LEN".blast $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN".tsv
+
+
 # 2. 
-python3 01_scripts/utils/05_extract_AFDs_wanted_SNPs.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds 
+python3 01_scripts/utils/05_extract_AFDs_wanted_SNPs.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined.afds $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN".tsv $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN".afds 
 
 # 3. 
-python3 01_scripts/utils/06_select_best_SNPs_pairwise.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.afds  $TARGET_SUM $EXP $MIN_DIST $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good."$TARGET_SUM".tsv
+python3 01_scripts/utils/06_select_best_SNPs_pairwise.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN".afds  $TARGET_SUM $EXP $MIN_DIST $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".tsv
