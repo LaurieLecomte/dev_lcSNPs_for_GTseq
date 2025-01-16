@@ -6,8 +6,8 @@ BLAST <- argv[1]
 SCORED <- argv[2]
 OUT <- argv[3]
 
-#blast_snp <- read.delim("/project/lbernatchez/users/lalec31/projets_labo/Bastien/lcSNPs_for_GTseq_RIN/10_SNP_selection/maf0.05_pctind0.65_maxdepth10_combined_0.1_scored_100.good.filtered_idy90_len160.blast", header=FALSE)
-#scored_snp <- read.delim("/project/lbernatchez/users/lalec31/projets_labo/Bastien/lcSNPs_for_GTseq_RIN/10_SNP_selection/maf0.05_pctind0.65_maxdepth10_combined_0.1_scored_100.good.tsv", header=TRUE)
+blast_snp <- read.delim(BLAST, header=FALSE)
+scored_snp <- read.delim(SCORED, header=TRUE)
 
 
 # 2. Extract SNPs ---------------------------------------------------------
