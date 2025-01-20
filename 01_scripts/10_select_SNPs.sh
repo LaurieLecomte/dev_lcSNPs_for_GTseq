@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 1 --mem=50G -J 10_select_SNPs -o log/10_select_SNPs_%j.log /bin/sh 01_scripts/10_select_SNPs.sh 12.6 &
+# srun -p small -c 5 --mem=50G -J 10_select_SNPs -o log/10_select_SNPs_%j.log /bin/sh 01_scripts/10_select_SNPs.sh 12.6 &
 
 # VARIABLES
 # Files
@@ -72,6 +72,7 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 NGSADMIX="/project/lbernatchez/users/lalec31/softwares/NGSadmix"
 REALSFS="/prg/angsd/0.937/misc/realSFS"
 
+CPU=5
 
 # LOAD REQUIRED MODULES
 module load python/3.7
@@ -95,7 +96,7 @@ if [[ ! -f "$GENOME".nsq ]]
 fi
 
 ## Run blast
-blastn -query $FASTA -subject $GENOME -out $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast -outfmt 6
+blastn -query $FASTA -subject $GENOME -out $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast -outfmt 6 -num_threads $CPU
 
 ## Filter blast results: get SNPs that have >1 mapping 
 MULTIMAP="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.blast.multimap"
