@@ -13,7 +13,7 @@ beagle_selec <- read.delim(BEAGLE_SELEC)
 for (i in 1:ITERATIONS){
   snp_subset <- beagle_selec[sort(sample(1:nrow(beagle_selec), size = SUBSET_SIZE, replace = FALSE)), ]
   
-  write.table(snp_subset, file = paste0(strsplit(BEAGLE_SELEC, split = '.beagle'), '_subset', i, '_', SUBSET_SIZE, 'sites', '.beagle'),
+  write.table(snp_subset, file = paste0(strsplit(BEAGLE_SELEC, split = '.beagle.gz'), '_subset', i, '_', SUBSET_SIZE, 'sites', '.beagle'),
               col.names = sapply(X = colnames(beagle_selec), FUN = function(x) { head(unlist(strsplit(x, split = '.', fixed = TRUE)), 1) }),
               row.names = FALSE, quote = FALSE, sep = "\t")
 }
