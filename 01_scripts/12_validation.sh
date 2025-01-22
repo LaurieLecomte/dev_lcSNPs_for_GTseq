@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# srun -p small -c 1 --mem=50G -J 11_select_SNPs -o log/11_select_SNPs_%j.log /bin/sh 01_scripts/11_select_SNPs.sh 12.6 &
+# srun -p small -c 1 --mem=50G -J 12_validation -o log/12_validation_%j.log /bin/sh 01_scripts/12_validation.sh 12.6 &
 
 # VARIABLES
 # Files
@@ -78,9 +78,7 @@ CPU=1
 # LOAD REQUIRED MODULES
 module load python/3.7
 module load R/4.2
-
-module load ncbiblast/2.6.0
-module load bedtools/2.31.1
+module load pcangsd/1.10
 
 
 # 1. Run pca on final set of SNPs
