@@ -82,10 +82,53 @@ module load pcangsd/1.10
 
 
 # 1. Run pca on final set of SNPs
-INPUT="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".beagle"
+INPUT="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".beagle.gz"
 echo "analyse covariance matrix on all individuals"
-pcangsd --threads $NB_CPU -b $INPUT -o $VALID_DIR/"$(basename -s '.beagle' $INPUT)"
+pcangsd --threads $CPU -b $INPUT -o $VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)"
 
 echo "transform covariance matrix into PCA"
-COV_MAT="$VALID_DIR/"$(basename -s '.beagle' $INPUT)".cov
+COV_MAT=$VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)".cov
 Rscript 01_scripts/utils/pca_simple.R "$COV_MAT" "$BAMLIST" "$INPUT" $ID_POP
+
+
+# 2. Run NGSadmix on final set of SNPs
+# Loop from K_MIN to K_MAX
+for i in $(seq $K_MIN $K_MAX)
+do 
+	echo $i
+	$NGSADMIX -P $CPU -likes $INPUT -minMaf $MIN_MAF -K $i -o $VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)"_K"$i"
+done
+
+
+
+# 3. Run pca and NGSadmix on subsets of final SNP set
+
+if [[ ! -d $VALID_DIR/subsets ]]
+then
+  mkdir $VALID_DIR/subsets
+fi
+
+# Generate subsets 
+Rscript 01_scripts/utils/subsets_from_final_beagle.R $INPUT 10 100 $VALID_DIR/subsets
+
+## bgzip
+for file in $(ls -1 $VALID_DIR/subsets/*subset*sites.beagle); do bgzip $file; done
+
+## Loop over these subset files
+for file in $(ls -1 $VALID_DIR/subsets/*subset*sites.beagle.gz);
+do
+
+  echo $file
+  # Run pca
+  echo "analyse covariance matrix on all individuals"
+  pcangsd --threads $CPU -b $file -o $VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)"
+  
+  echo "transform covariance matrix into PCA"
+  COV_MAT=$VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)".cov
+  Rscript 01_scripts/utils/pca_simple.R "$COV_MAT" "$BAMLIST" "$file" $ID_POP
+  
+  # Run NGSadmix
+  for i in $(seq $K_MIN $K_MAX); do $NGSADMIX -P $CPU -likes $file -minMaf $MIN_MAF -K $i -o $VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)"_K"$i"; done
+  
+  #echo "done for $file"
+done
