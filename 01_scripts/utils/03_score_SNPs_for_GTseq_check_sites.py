@@ -155,8 +155,15 @@ with open(input_selected_snps) as infile:
             flanking_snps = (all_snps[chrom][pos_truncated - 1] +
                     all_snps[chrom][pos_truncated] +
                     all_snps[chrom][pos_truncated + 1])
+            
+            # check that snp is also present in the full background set
+            if len([x for x in flanking_snps if abs(x[1] - pos) == 0]) == 0:
+                print("Flushed a SNP that was unique to the select set and absent from the background set")
+                continue
 
             center_snp = [x for x in flanking_snps if abs(x[1] - pos) == 0][0]
+            #print(center_snp)
+            alleles = center_snp[2: 4]
 
             flanking_snps = [x for x in flanking_snps if
                     abs(x[1] - pos) and abs(x[1] - pos) <= window_size]
@@ -168,6 +175,8 @@ with open(input_selected_snps) as infile:
             right = min(pos + window_size, len(genome[chrom]))
             
             seq = list(genome[chrom][left: right])
+            print("test", seq[window_size] in alleles)
+
             seq_original = seq[:]
 
             if len(seq) < 2 * window_size + 1:
@@ -186,5 +195,5 @@ with open(input_selected_snps) as infile:
             outfile.write("\t".join([str(x) for x in l +
                 [num_snps, round(sum_mafs, 4), complexity, round(gc_content, 4)] +
                 list(center_snp) +
-                ["".join(seq), "".join(seq_original)]
+                ["".join(seq), seq_original]
                 ]) + "\n")
