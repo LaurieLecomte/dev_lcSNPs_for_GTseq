@@ -28,29 +28,29 @@ write.table(remaining_snp,
             row.names = FALSE, quote = FALSE, sep = "\t")
 
 
-library(ggplot2)
-library(dplyr)
-remaining_plot <- select(remaining_snp, marker)
+#library(ggplot2)
+#library(dplyr)
+#remaining_plot <- select(remaining_snp, marker)
 
-remaining_plot$CHR <- sapply(X = remaining_plot$marker, FUN = function (x) sub("([A-Z0-9_.]+)_([0-9]+)", "\\1", x))
-remaining_plot$POS <- sapply(X = remaining_plot$marker, FUN = function (x) as.numeric(sub("([A-Z0-9_.]+)_([0-9]+)", "\\2", x)))
+#remaining_plot$CHR <- sapply(X = remaining_plot$marker, FUN = function (x) sub("([A-Z0-9_.]+)_([0-9]+)", "\\1", x))
+#remaining_plot$POS <- sapply(X = remaining_plot$marker, FUN = function (x) as.numeric(sub("([A-Z0-9_.]+)_([0-9]+)", "\\2", x)))
 
 
-chrs <- read.delim("/project/lbernatchez/users/lalec31/projets_labo/Bastien/lcSNPs_for_GTseq_RIN/02_infos/chrs.bed", 
-                   header=FALSE,
-                   col.names = c('CHR', 'START', 'STOP'))
-chrs0 <- chrs
+#chrs <- read.delim("/project/lbernatchez/users/lalec31/projets_labo/Bastien/lcSNPs_for_GTseq_RIN/02_infos/chrs.bed", 
+#                   header=FALSE,
+#                   col.names = c('CHR', 'START', 'STOP'))
+#chrs0 <- chrs
 
-for (i in 1:nrow(chrs)){
-  if (i > 1){
-    chrs$START[i] <- (chrs$STOP[i - 1]) + 1
-    chrs$STOP[i] <- chrs$START[i] + chrs$STOP[i] 
-  }
-}
+#for (i in 1:nrow(chrs)){
+#  if (i > 1){
+#    chrs$START[i] <- (chrs$STOP[i - 1]) + 1
+#    chrs$STOP[i] <- chrs$START[i] + chrs$STOP[i] 
+#  }
+#}
 
-remaining_plot <- merge(x = remaining_plot, y = chrs, by = 'CHR')
-remaining_plot$POS_updated <- remaining_plot$POS + remaining_plot$START
-remaining_plot$STOP_updated <- remaining_plot$STOP + remaining_plot$START
+#remaining_plot <- merge(x = remaining_plot, y = chrs, by = 'CHR')
+#remaining_plot$POS_updated <- remaining_plot$POS + remaining_plot$START
+#remaining_plot$STOP_updated <- remaining_plot$STOP + remaining_plot$START
 
-plot(remaining_plot$POS_updated, remaining_plot$POS_updated)
-abline(v = remaining_plot$STOP)
+#plot(remaining_plot$POS_updated, remaining_plot$POS_updated)
+#abline(v = remaining_plot$STOP)
