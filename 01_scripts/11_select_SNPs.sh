@@ -42,7 +42,7 @@ PERCENT_IND=0.65 # min fraction of samples required to have min depth at given s
 WINDOW=25000  #window size for sliding window FST & Thetas
 WINDOW_STEP=5000  #window step
 NSITES=500000 #to make realSFS goes faster -reduce the number of sites considered
-GROUP=pop
+GROUP=pops
 
 ## Admixture
 K_MIN=2 #min nb of pop to consider for NGS admix
@@ -87,3 +87,7 @@ python3 01_scripts/utils/05_extract_AFDs_wanted_SNPs.py $SELECT_DIR/maf"$MIN_MAF
 
 # 3. 
 python3 01_scripts/utils/06_select_best_SNPs_pairwise.py $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN".afds $TARGET_SUM $EXP $MIN_DIST $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".tsv
+
+# 4. Extract selected SNPs from beagle file
+BEAGLE="$SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_all_chrs_canon.beagle.gz"
+Rscript 01_scripts/utils/extract_final_SNPs_beagle.R $BEAGLE $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".tsv

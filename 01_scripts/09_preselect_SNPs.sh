@@ -42,7 +42,7 @@ PERCENT_IND=0.65 # min fraction of samples required to have min depth at given s
 WINDOW=25000  #window size for sliding window FST & Thetas
 WINDOW_STEP=5000  #window step
 NSITES=500000 #to make realSFS goes faster -reduce the number of sites considered
-GROUP=pop
+GROUP=pops
 
 ## Admixture
 K_MIN=2 #min nb of pop to consider for NGS admix
