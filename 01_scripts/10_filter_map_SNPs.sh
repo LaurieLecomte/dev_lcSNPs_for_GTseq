@@ -88,7 +88,7 @@ Rscript 01_scripts/utils/04.2_filter_SNPs.R $SELECT_DIR/maf"$MIN_MAF"_pctind"$PE
 # 2. Blast each SNP's flanking sequence against reference
 ## Build a fasta of flanking sequences
 FASTA="$SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.fasta"
-less $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv | tail -n+2 | awk '{print ">"$1 "_" $2 "\n" $14}' > $FASTA
+less $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good.tsv | tail -n+2 | awk '{print ">"$1 "_" $2 "\n" $15}' > $FASTA
 
 ## Fist generate database from reference
 if [[ ! -f "$GENOME".nsq ]]
