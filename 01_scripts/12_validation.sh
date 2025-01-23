@@ -97,7 +97,7 @@ for i in $(seq $K_MIN $K_MAX)
 do 
 	echo $i
 	$NGSADMIX -P $CPU -likes $INPUT -minMaf $MIN_MAF -K $i -o $VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)"_K"$i"
-  Rscript 01_scripts/utils/plot_admix.R $VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)"_K"$i" $ID_POP
+  Rscript 01_scripts/utils/plot_admix.R $VALID_DIR/"$(basename -s '.beagle.gz' $INPUT)"_K"$i".qopt $ID_POP
 done
 
 
@@ -132,7 +132,7 @@ do
   for i in $(seq $K_MIN $K_MAX); 
   do 
     $NGSADMIX -P $CPU -likes $file -minMaf $MIN_MAF -K $i -o $VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)"_K"$i"
-    Rscript 01_scripts/utils/plot_admix.R $VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)"_K"$i" $ID_POP
+    Rscript 01_scripts/utils/plot_admix.R $VALID_DIR/subsets/"$(basename -s '.beagle.gz' $file)"_K"$i".qopt $ID_POP
   done
   
   #echo "done for $file"
