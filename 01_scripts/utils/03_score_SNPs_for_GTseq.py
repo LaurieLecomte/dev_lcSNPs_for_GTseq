@@ -155,6 +155,11 @@ with open(input_selected_snps) as infile:
             flanking_snps = (all_snps[chrom][pos_truncated - 1] +
                     all_snps[chrom][pos_truncated] +
                     all_snps[chrom][pos_truncated + 1])
+                    
+            # check that snp is also present in the full background set
+            if len([x for x in flanking_snps if abs(x[1] - pos) == 0]) == 0:
+                print("Flushed a SNP that was unique to the select set and absent from the background set")
+                continue
 
             center_snp = [x for x in flanking_snps if abs(x[1] - pos) == 0][0]
 
