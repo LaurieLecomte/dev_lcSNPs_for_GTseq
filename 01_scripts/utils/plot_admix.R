@@ -39,5 +39,5 @@ ggplot(data = admix_long) +
 ggsave(admix_plot, 
        filename = paste0(unlist(strsplit(ADMIX, split = '.qopt')), ".pdf"),
        device = "pdf", dpi = 320,
-       height = 6, width = 5, units = "in")
+       height = 5, width = 6, units = "in")
 
