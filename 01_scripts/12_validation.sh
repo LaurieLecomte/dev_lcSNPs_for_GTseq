@@ -113,7 +113,7 @@ fi
 Rscript 01_scripts/utils/subsets_from_final_beagle.R $INPUT 10 100 $VALID_DIR/subsets
 
 ## bgzip
-for file in $(ls -1 $VALID_DIR/subsets/*subset*sites.beagle); do bgzip $file; done
+for file in $(ls -1 $VALID_DIR/subsets/*subset*sites.beagle); do bgzip $file -f ; done
 
 ## Loop over these subset files
 for file in $(ls -1 $VALID_DIR/subsets/*subset*sites.beagle.gz);

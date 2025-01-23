@@ -93,4 +93,4 @@ BEAGLE="$SNP_DIR/all/all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_
 Rscript 01_scripts/utils/extract_final_SNPs_beagle.R $BEAGLE $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".tsv
 
 # Bgzip
-bgzip $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".beagle
+bgzip $SELECT_DIR/maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_combined_"$MIN_AFD"_scored_"$WIN".good_idy"$MIN_IDY"_len"$ALN_LEN"."$TARGET_SUM".beagle -f 
