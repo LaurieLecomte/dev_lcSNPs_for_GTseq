@@ -86,31 +86,37 @@ mkdir $FST_DIR/$GROUP
 
 # 1. Subset bamfilelist to have equal number of bam files per pop -> necessary ?
 
-Rscript 01_scripts/utils/subset_random_Nind.r "$GROUP" $FST_DIR
+#Rscript 01_scripts/utils/subset_random_Nind.r "$GROUP" $FST_DIR
 
 #2 do saf for all population listed
-cat $POP_FILE1 | while read i
-do
-  echo $i
+#cat $POP_FILE1 | while read i
+#do
+#  echo $i
 
-  N_IND=$(wc -l $FST_DIR/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
-  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
-  MIN_IND=${MIN_IND_FLOAT%.*} 
+#  N_IND=$(wc -l $FST_DIR/$GROUP/"$i"subsetbam.filelist | cut -d " " -f 1) # or N_IND=$(wc -l $MAF_DIR/$i/"$i"bam.filelist | cut -d " " -f 1)
+#  MIN_IND_FLOAT=$(echo "($N_IND * $PERCENT_IND)"| bc -l)
+#  MIN_IND=${MIN_IND_FLOAT%.*} 
 
-  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
-  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
+#  echo "working on pop $i, $N_IND individuals, will use the sites file provided"
+#  echo "will filter for sites with at least one read in $MIN_IND individuals, which is $PERCENT_IND of the total"
 
   # CHRECK FOR -anc or -ref and -doMajorMinor
   # CORRECT MIN_IND
-  angsd -P $NB_CPU \
-  -dosaf 5 -GL 2 -doMajorMinor 4 \
-  -ref $GENOME \
-  -rf $CHR_LIST \
-  -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
-  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites \
-  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
-done
+#  angsd -P $NB_CPU \
+#  -dosaf 5 -GL 2 -doMajorMinor 4 \
+#  -ref $GENOME \
+#  -rf $CHR_LIST \
+#  -remove_bads 1 -minMapQ $MIN_MAPQ -minQ $MIN_Q -minInd $MIN_IND -setMinDepthInd $MIN_DEPTH \
+#  -sites 02_infos/sites_all_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"_canonical_sites \
+#  -b $FST_DIR/$GROUP/"$i"subsetbam.filelist -out $FST_DIR/$GROUP/"$i"_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR"
+#done
 
+
+#
+if [[ -f $FST_DIR/paiwise_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".txt ]]
+then
+  rm $FST_DIR/paiwise_maf"$MIN_MAF"_pctind"$PERCENT_IND"_maxdepth"$MAX_DEPTH_FACTOR".txt
+fi
 
 
 # 3 Calculate FST
