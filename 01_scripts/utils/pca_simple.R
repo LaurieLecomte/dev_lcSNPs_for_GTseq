@@ -164,7 +164,8 @@ pca_df$POP <- as.factor(pca_df$POP)
 
 library(ggpubr)
 plot_PC1_2 <- 
-ggplot(data = pca_df, aes(x = round(PC1, 2), y = round(PC2, 2), label = ID)) +
+#ggplot(data = pca_df, aes(x = round(PC1, 2), y = round(PC2, 2), label = ID)) +
+ggplot(data = pca_df, aes(x = round(PC1, 2), y = round(PC2, 2))) +
   geom_point(aes(col = POP, shape = POP)) +
   stat_ellipse(linewidth = 0.5, aes(group = POP, col = POP), show.legend = FALSE) + 
   labs(y = paste0("PC2 (", var2, ' %)'), x = paste0("PC1 (", var1, ' %)'),
@@ -176,7 +177,8 @@ saveRDS(plot_PC1_2, file = paste0(strsplit(x = COV_MAT, split = '.cov')[[1]],
 
 
 plot_PC3_4 <- 
-ggplot(data = pca_df, aes(x = round(PC3, 2), y = round(PC4, 2), label = ID)) +
+#ggplot(data = pca_df, aes(x = round(PC3, 2), y = round(PC4, 2), label = ID)) +
+ggplot(data = pca_df, aes(x = round(PC3, 2), y = round(PC4, 2))) +
   geom_point(aes(col = POP, shape = POP)) +
   stat_ellipse(linewidth = 0.5, aes(group = POP, col = POP), show.legend = FALSE) + 
   labs(x = paste0("PC3 (", var3, ' %)'), y = paste0("PC4 (", var4, ' %)'),
