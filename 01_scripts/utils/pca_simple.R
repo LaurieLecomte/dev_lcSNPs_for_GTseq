@@ -95,7 +95,8 @@ if (all(rownames(pca_df) == names(kmeans_res$cluster) )) {
 ### PC1-2
 jpeg(file = paste0(COV_MAT, ".PC1_PC2.jpg"))
 par(mfrow = c(1,1))
-plot_PC1_PC2 <- ggplot(data = pca_df, aes(x = PC1, y = PC2, label = ID)) +
+#plot_PC1_PC2 <- ggplot(data = pca_df, aes(x = PC1, y = PC2, label = ID)) +
+plot_PC1_PC2 <- ggplot(data = pca_df, aes(x = PC1, y = PC2)) +
   geom_point(aes(col = POP, shape = factor(cluster))) +
   geom_text(size = 1, hjust = 0, 
             nudge_x = -0.002, nudge_y = 0.002) +
@@ -137,7 +138,8 @@ ggsave(plot_PC1_PC2,
 
 ### PC3-4
 jpeg(file = paste0(COV_MAT, ".PC3_PC4.jpg"))
-plot_PC3_PC4 <- ggplot(data = pca_df, aes(x = PC3, y = PC4, label = ID)) +
+#plot_PC3_PC4 <- ggplot(data = pca_df, aes(x = PC3, y = PC4, label = ID)) +
+plot_PC3_PC4 <- ggplot(data = pca_df, aes(x = PC3, y = PC4)) +
   geom_point(aes(col = POP, shape = factor(cluster))) +
   geom_text(size = 1, hjust = 0, 
             nudge_x = -0.002, nudge_y = 0.002) +
