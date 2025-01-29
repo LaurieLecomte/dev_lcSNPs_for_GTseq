@@ -98,8 +98,8 @@ par(mfrow = c(1,1))
 #plot_PC1_PC2 <- ggplot(data = pca_df, aes(x = PC1, y = PC2, label = ID)) +
 plot_PC1_PC2 <- ggplot(data = pca_df, aes(x = PC1, y = PC2)) +
   geom_point(aes(col = POP, shape = factor(cluster))) +
-  geom_text(size = 1, hjust = 0, 
-            nudge_x = -0.002, nudge_y = 0.002) +
+  #geom_text(size = 1, hjust = 0, 
+  #          nudge_x = -0.002, nudge_y = 0.002) +
   labs(x = paste("PC1", var1), y = paste("PC2", var2), 
        title = paste("k_SS" ,k_ss) ) #+
   #scale_color_manual(values = c("red", "blue"))
@@ -141,8 +141,8 @@ jpeg(file = paste0(COV_MAT, ".PC3_PC4.jpg"))
 #plot_PC3_PC4 <- ggplot(data = pca_df, aes(x = PC3, y = PC4, label = ID)) +
 plot_PC3_PC4 <- ggplot(data = pca_df, aes(x = PC3, y = PC4)) +
   geom_point(aes(col = POP, shape = factor(cluster))) +
-  geom_text(size = 1, hjust = 0, 
-            nudge_x = -0.002, nudge_y = 0.002) +
+  #geom_text(size = 1, hjust = 0, 
+  #          nudge_x = -0.002, nudge_y = 0.002) +
   labs(x = paste("PC3", var3), y = paste("PC4", var4), 
        title = paste("k_SS", k_ss) ) 
 
