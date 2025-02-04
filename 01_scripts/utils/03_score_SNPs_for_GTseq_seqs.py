@@ -3,7 +3,7 @@
 complexity and GC content, etc.
 
 Usage:
-    <program> input_selected_snps input_all_snps input_genome window_size output_file output_fasta
+    <program> input_selected_snps input_all_snps input_genome window_size output_file
 
 `input_selected_snps` file format:
 
@@ -93,7 +93,6 @@ try:
     input_genome = sys.argv[3]
     window_size = int(sys.argv[4])
     output_file = sys.argv[5]
-    output_fasta = sys.argv[6]
 except:
     print(__doc__)
     sys.exit(1)
@@ -156,6 +155,11 @@ with open(input_selected_snps) as infile:
             flanking_snps = (all_snps[chrom][pos_truncated - 1] +
                     all_snps[chrom][pos_truncated] +
                     all_snps[chrom][pos_truncated + 1])
+            
+            # check that snp is also present in the full background set
+            if len([x for x in flanking_snps if abs(x[1] - pos) == 0]) == 0:
+                print("Flushed a SNP that was unique to the select set and absent from the background set")
+                continue
 
             center_snp = [x for x in flanking_snps if abs(x[1] - pos) == 0][0]
 
@@ -171,47 +175,9 @@ with open(input_selected_snps) as infile:
             seq = list(genome[chrom][left: right])
             seq_original = seq[:]
 
-            # Use compression, patterns, GC content...
-            complexity = len(gzip.compress("".join(seq).encode()))
-            gc_content = (seq.count("G") + seq.count("C")) / (len(seq) - seq.count("N"))
-
-            for s in flanking_snps:
-                seq[s[1] - pos + window_size] = "N"
-
-            seq[window_size] = "[" + center_snp[2] + "/" + center_snp[3] + "]"
-
-            outfile.write("\t".join([str(x) for x in l +
-                [num_snps, round(sum_mafs, 4), complexity, round(gc_content, 4)] +
-                list(center_snp) +
-                ["".join(seq), seq_original]
-                ]) + "\n")
-                
-with open(input_selected_snps) as infile:
-
-    with open(output_fasta, "wt") as outfile:
-        for line in infile:
-            if "position" in line:
+            if len(seq) < 2 * window_size + 1:
+                print("Flushed a SNP that was too close to one end of a scaffold")
                 continue
-
-            l = line.strip().split("\t")
-            chrom = l[0]
-            if not chrom in seen_chrom:
-                print(f"    Scaffold: {chrom}")
-                seen_chrom.add(chrom)
-
-            pos = int(l[1])
-
-            pos_truncated = pos // window_size
-
-
-            center_snp = [x for x in flanking_snps if abs(x[1] - pos) == 0][0]
-
-
-            left = max(pos - window_size - 1, 0)
-            right = min(pos + window_size, len(genome[chrom]))
-            
-            seq = list(genome[chrom][left: right])
-            seq_original = seq[:]
 
             # Use compression, patterns, GC content...
             complexity = len(gzip.compress("".join(seq).encode()))
@@ -221,7 +187,10 @@ with open(input_selected_snps) as infile:
                 seq[s[1] - pos + window_size] = "N"
 
             #seq[window_size] = "[" + center_snp[2] + "/" + center_snp[3] + "]"
+            seq[window_size] = center_snp[2]
 
-            outfile.write("\t".join("\_".join([chrom, pos]) + [seq_original] + "\n"))
-
-              
+            outfile.write("\t".join([str(x) for x in l +
+                [num_snps, round(sum_mafs, 4), complexity, round(gc_content, 4)] +
+                list(center_snp) +
+                ["".join(seq), seq_original]
+                ]) + "\n")

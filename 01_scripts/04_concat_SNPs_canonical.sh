@@ -42,7 +42,7 @@ NGSPARALOG="/project/lbernatchez/users/lalec31/softwares/ngsParalog/ngsParalog"
 CHR_LIST="02_infos/chrs.txt"
 
 # LOAD REQUIRED MODULES
-module load angsd/0.931
+module load angsd/0.937
 module load samtools/1.15
 module load R/4.2
 

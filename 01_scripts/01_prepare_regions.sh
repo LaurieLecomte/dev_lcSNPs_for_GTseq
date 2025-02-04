@@ -8,7 +8,7 @@
 #EXCL_DIR="02_infos/regions_to_exclude"
 #less $GFF | gff2bed | cut -f1-3 > $EXCL_DIR/repeats.bed 
 
-## Extract N positions in the reference fasta
+## Extract non-ATCG positions in the reference fasta
 #module load seqkit/2.8.0
 #seqkit locate -P -i -r -G -p "[^A^T^C^G]+" --bed 03_genome/genome.fasta | cut -f1-3 > 02_infos/regions_to_exclude/ambiguous_bases.bed
 

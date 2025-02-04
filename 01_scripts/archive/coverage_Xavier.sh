@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# parallel -a 02_infos/samples40.txt -j 10 srun -p small -c 1 -J coverage_{} -o log/coverage_{}_%j.log /bin/sh 01_scripts/coverage.sh {} &
+# parallel -a 02_infos/samples_Xavier.txt -j 10 srun -p small -c 1 -J coverage_{} -o log/coverage_{}_%j.log /bin/sh 01_scripts/coverage_Xavier.sh {} &
 
 # VARIABLES
 SAMPLE=$1
-BAM="04_bam/"$SAMPLE".bam"
+BAM="04_bam/bam_Xavier/rg/"$SAMPLE".bam"
 COV_DIR="coverage"
 REGIONS="02_infos/chrs.bed"
 
