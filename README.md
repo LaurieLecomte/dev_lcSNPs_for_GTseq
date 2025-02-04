@@ -30,7 +30,7 @@ The python scripts for SNP selection were built by Eric Normandeau (https://gith
 * A reference genome (.fasta)
 * A tab-seperated file listing sample ID and their assigned population (`02_infos/ID_pop.txt`)
 * A list of populations included in the study (can be made by `less 02_infos/ID_pop.txt | cut -f2 | sort | uniq > 02_infos/pops.txt`)
-* A list of bam file paths to mapped short reads for each sample ()`02_infos/bam.filelist`). See the [wgs_sample_preparation workflow](https://github.com/enormandeau/wgs_sample_preparation) for detailed read mapping steps.
+* A list of bam file paths to mapped short reads for each sample (`02_infos/bam.filelist`). See the [wgs_sample_preparation workflow](https://github.com/enormandeau/wgs_sample_preparation) for detailed read mapping steps.
 
 ### Software
 * `angsd 0.937`
